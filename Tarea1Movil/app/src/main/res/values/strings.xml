@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">Tarea1MyFirstApp10140884</string>
+    <string name="buttonSend">Enviar</string>
+    <string name="nombretxt">Digite un nombre...</string>
+    <string name="apellidotxt">Digite un apellido...</string>
+    <string name="generotxt">Genero:</string>
+    <string name="nacimientotxt">Nacimiento:</string>
+    <string name="fecha">Fecha</string>
+    <string name="programatxt">Le gusta programar?</string>
+    <string name="sisi">Si</string>
+    <string name="nono">No</string>
+    <string name="lenguajetxt">Lenguaje:</string>
+    <string name="java">Java</string>
+    <string name="python">Python</string>
+    <string name="js">JS</string>
+    <string name="go">Go lang</string>
+    <string name="c">C/C++</string>
+    <string name="csh">C#</string>
+
+    <string name="enviar">Enviar</string>
+    <string name="borrar">Borrar</string>
+
+</resources>
