@@ -124,6 +124,8 @@ public class MainActivity extends AppCompatActivity {
         Spinner sp = findViewById(R.id.spinner);
         if( editText.getText().toString().isEmpty() || editText2.getText().toString().isEmpty() || sp.getSelectedItemPosition() == 0 ) {
             Toast.makeText(MainActivity.this, "No se puede enviar el formulario. Olvidaste campos obligatorios", Toast.LENGTH_SHORT).show();
+        }else if(r1.isChecked() && (c1.isChecked() !=true && c2.isChecked() !=true&& c3.isChecked() !=true && c4.isChecked() !=true&& c5.isChecked() !=true&& c6.isChecked() !=true)){
+            Toast.makeText(MainActivity.this, "No se puede enviar el formulario. Olvidaste Seleccionar el lenguaje", Toast.LENGTH_SHORT).show();
         }else{
             EditText editText3 = (EditText) findViewById(R.id.editTextDate);
 
