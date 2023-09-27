@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">My Application</string>
+    <string name="title_home">Crear</string>
+    <string name="title_dashboard">ListView</string>
+    <string name="title_notifications">RecycleView</string>
+    <string name="titulotxt">Titulo: </string>
+    <string name="cuerpotxt">Cuerpo: </string>
+    <string name="rellenadotitulo">Titulo de la tarea...</string>
+    <string name="rellenadocontenido">Contenido de la tarea....</string>
+    <string name="btnCrear">Crear</string>
+    <string name="idss">#</string>
+    <string name="deletebtn">Borrar</string>
+    <string name="editbn">Editar</string>
+
+
+
+</resources>
