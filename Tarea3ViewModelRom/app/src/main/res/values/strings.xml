@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">Tarea3ViewModelRom</string>
+    <string name="title_home">Add</string>
+    <string name="title_dashboard">RecycleList</string>
+    <string name="seemore">Ver</string>
+
+    <string name="titulotxt">Titulo: </string>
+    <string name="cuerpotxt">Cuerpo: </string>
+    <string name="rellenadotitulo">Titulo de la tarea...</string>
+    <string name="rellenadocontenido">Contenido de la tarea....</string>
+    <string name="btnCrear">Crear</string>
+
+    <string name="deletebtn">Borrar</string>
+    <string name="editbn">Editar</string>
+
+</resources>
