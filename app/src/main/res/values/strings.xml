@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">primerParcialMovil</string>
+    <string name="bttext">Ver</string>
+    <string name="product_id">Id: </string>
+    <string name="product_title">Title: </string>
+    <string name="product_description">Description: </string>
+    <string name="product_price">Price: </string>
+    <string name="product_discount">Discount: </string>
+    <string name="product_rating">Rating: </string>
+    <string name="product_stock">Stock: </string>
+    <string name="product_brand">Brand: </string>
+    <string name="product_category">Category: </string>
+</resources>
