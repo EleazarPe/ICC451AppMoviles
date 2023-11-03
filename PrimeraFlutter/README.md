@@ -1,16 +1,6 @@
 # tarea1flutter
 
-A new Flutter project.
+El primer problema que encontré fue que las imágenes en la carpeta assets no se estaban cargando. Para solucionarlo revisé el archivo pubspec.yaml. Hice que las imágenes estuvieran correctamente en la sección 'assets'. 
 
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+El segundo problema ams grande que tuve y tengo es el proceso de pasar de Java a Dart donde en vez de colocar (,) colocaba (;)
+y me encontraba un poco perdido en la estructura y como agregar elementos o widget, en mi opinion considero que Flutter no es el lenguaje mas agradable he utilizado.
