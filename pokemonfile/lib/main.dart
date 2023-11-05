@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:cached_network_image/cached_network_image.dart';
 import 'DTO/PokeList.dart';
+import 'Database/Database.dart';
 void main() {
   runApp(PokedexApp());
 }
@@ -28,6 +29,7 @@ class _PokedexScreenState extends State<PokedexScreen> {
   final String apiUrl = "https://pokeapi.co/api/v2/pokemon?limit=60"; // Cambio en el límite inicial
   late PokeList pokemons = PokeList(results: [], count: 0, next: '', previous: '');
   late PokeList pokemonsTemp;
+  DatabaseHelper db = DatabaseHelper();
 
   bool isLoading = false;
   ScrollController _scrollController = ScrollController();
