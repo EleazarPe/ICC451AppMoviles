@@ -4,11 +4,11 @@
 
 import 'dart:convert';
 
-PokeList pokeListFromJson(String str) => PokeList.fromJson(json.decode(str));
+PokeOnly pokeListFromJson(String str) => PokeOnly.fromJson(json.decode(str));
 
-String pokeListToJson(PokeList data) => json.encode(data.toJson());
+String pokeListToJson(PokeOnly data) => json.encode(data.toJson());
 
-class PokeList {
+class PokeOnly {
   List<Ability> abilities;
   int baseExperience;
   List<Species> forms;
@@ -29,7 +29,7 @@ class PokeList {
   List<Type> types;
   int weight;
 
-  PokeList({
+  PokeOnly({
     required this.abilities,
     required this.baseExperience,
     required this.forms,
@@ -51,7 +51,7 @@ class PokeList {
     required this.weight,
   });
 
-  factory PokeList.fromJson(Map<String, dynamic> json) => PokeList(
+  factory PokeOnly.fromJson(Map<String, dynamic> json) => PokeOnly(
     abilities: List<Ability>.from(json["abilities"].map((x) => Ability.fromJson(x))),
     baseExperience: json["base_experience"],
     forms: List<Species>.from(json["forms"].map((x) => Species.fromJson(x))),

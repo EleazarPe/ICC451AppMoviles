@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:pokemonfile/DTO/PokeOnly.dart';
+
 PokeList pokeListFromJson(String str) => PokeList.fromJson(json.decode(str));
 
 String pokeListToJson(PokeList data) => json.encode(data.toJson());
@@ -35,11 +37,12 @@ class PokeList {
 class Result {
   String name;
   String url;
+  PokeOnly? pokemon;
 
   Result({
     required this.name,
     required this.url,
-  });
+  });//: pokemon = PokeOnly.fromJson({});
 
   factory Result.fromJson(Map<String, dynamic> json) => Result(
     name: json["name"],
