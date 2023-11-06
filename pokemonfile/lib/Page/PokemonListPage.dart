@@ -18,6 +18,7 @@ class _PokemonListPageState extends State<PokemonListPage> {
   final String apiUrl = "https://pokeapi.co/api/v2/pokemon?limit=50"; // Cambio en el límite inicial
   late PokeList pokemons = PokeList(results: [], count: 0, next: '', previous: '');
   late PokeList pokemonsTemp;
+  bool _favoriteFilter = false;
   DatabaseHelper db = DatabaseHelper();
 
   bool isLoading = false;
@@ -36,7 +37,6 @@ class _PokemonListPageState extends State<PokemonListPage> {
     });
 
   }
-
 
   void fetchPokemons() async{
     http.get(Uri.parse(apiUrl)).then((response) async {
@@ -172,11 +172,10 @@ class _PokemonListPageState extends State<PokemonListPage> {
     }).toList());
     fetchAllPokemonData(displayedPokemons);
     // List<Result> displayedPokemons= [];
+
+
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Pokedex'),
-        backgroundColor: Color.fromARGB(255, 202, 0, 16),
-      ),
+      appBar: appBarDefault(),
       body: Column(
         children: [
           Padding(
@@ -239,9 +238,33 @@ class _PokemonListPageState extends State<PokemonListPage> {
   }
 
   void _openPokemonDetails(BuildContext context, Result pokemon) {
+    setState(() {});
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => PokemonDetailsPage(pokemon: pokemon)),
+      MaterialPageRoute(builder: (context) => PokemonDetailsPage(pokemonBasic: pokemon)),
     );
   }
+
+  AppBar appBarDefault(){
+    return AppBar(
+      title: Text('Pokedex'),
+      backgroundColor: Color.fromARGB(255, 202, 0, 16),
+      actions: [
+
+        IconButton(
+            onPressed: () {
+              _favoriteFilter = !_favoriteFilter;
+              setState(() {});
+              },
+            icon: _favoriteFilter ?
+            Icon(Icons.favorite_outlined, color: Colors.red,) :
+            Icon(Icons.favorite_border)
+        ),
+      ],
+    );
+  }
+
+
+
 }
+
