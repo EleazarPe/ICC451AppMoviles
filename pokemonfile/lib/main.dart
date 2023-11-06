@@ -264,6 +264,11 @@ class PokemonCard extends StatelessWidget {
                   children: [
                     Center(
                       child: CachedNetworkImage(
+                        imageUrl: 'https://github.com/Codeaamy/Pokedex/blob/master/images/pokeball.png?raw=true',
+                      ),
+                    ),
+                    Center(
+                      child: CachedNetworkImage(
                         imageUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/${int.parse(pokemon.url.split('/')[6])}.png',
                         //imageUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${int.parse(pokemon.url.split('/')[6])}.png',
                         placeholder: (context, url) => Center(child: CircularProgressIndicator( valueColor: AlwaysStoppedAnimation<Color>(Colors.red),)),
@@ -276,7 +281,7 @@ class PokemonCard extends StatelessWidget {
               ),
             ),
             Expanded(
-              flex: 2, // Ocupa el 25% del espacio
+              flex: 1, // Ocupa el 25% del espacio
               child: Container(
                 color: Colors.white,
                 child: Container(
