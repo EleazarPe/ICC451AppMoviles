@@ -31,7 +31,7 @@ class _PokemonListPageState extends State<PokemonListPage> {
     fetchPokemons();
     allPokemons();
     _scrollController.addListener(() {
-      if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent * 0.1) {
+      if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent * 0.2) {
         fetchMorePokemons();
       }
     });
@@ -60,7 +60,6 @@ class _PokemonListPageState extends State<PokemonListPage> {
         throw Exception('Failed to load pokemons');
       }
     }).catchError((error) {
-      // Manejar errores si la petición falla
       print('Error: $error');
     });
   }
@@ -95,7 +94,7 @@ class _PokemonListPageState extends State<PokemonListPage> {
         isLoading = true;
       });
 
-      final response = await http.get(Uri.parse("https://pokeapi.co/api/v2/pokemon?limit=50&offset=${pokemons.results.length}")); // Carga 60 más
+      final response = await http.get(Uri.parse("https://pokeapi.co/api/v2/pokemon?limit=50&offset=${pokemons.results.length}")); // Carga 50 mas
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
         //List<dynamic> results = data['results'];
@@ -170,8 +169,10 @@ class _PokemonListPageState extends State<PokemonListPage> {
       final searchLower = searchString.toLowerCase();
       return nameLower.contains(searchLower) || (pokemon.url.split('/')[6])==searchLower;
     }).toList());
-    fetchAllPokemonData(displayedPokemons);
-    // List<Result> displayedPokemons= [];
+    if(!searchString.isEmpty){
+      fetchAllPokemonData(displayedPokemons);
+    }
+    //fetchAllPokemonData(displayedPokemons);
 
 
     return Scaffold(
