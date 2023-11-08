@@ -35,7 +35,7 @@ Future<void> changeFavorite(int id)
 
 # Clase Pokemon
 Clase que se usa para obtener información de la base de datos
-## Variables:
+# Variables:
 -	  int id;
 -	  int favorite;
 -	  String name;
