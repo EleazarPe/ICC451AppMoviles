@@ -21,6 +21,7 @@ class PokemonCard extends StatefulWidget {
 
 class _PokemonCardState extends State<PokemonCard> {
   late Result pokemon;
+  late Pokemon pokemonDb;
   final DatabaseHelper db;
   late bool isFavorite = false; // Inicialización por defecto
 
@@ -32,15 +33,14 @@ class _PokemonCardState extends State<PokemonCard> {
   @override
   void initState() {
     super.initState();
-    checkIfFavorite();
+    obtainPokemonDb();
   }
 
 
-  void checkIfFavorite() async {
-    bool favorite = await db.isFavorite(int.parse(pokemon.url.split('/')[6]));
-    setState(() {
-      isFavorite = favorite;
-    });
+  void obtainPokemonDb() async {
+    List<Pokemon> pokemonList = await db.pokemonId(int.parse(pokemon.url.split('/')[6]));
+    pokemonDb = pokemonList[0];
+    isFavorite = pokemonDb.favorite == 1 ? true : false;
   }
 
   @override
@@ -48,7 +48,7 @@ class _PokemonCardState extends State<PokemonCard> {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.pokemon != widget.pokemon) {
       pokemon = widget.pokemon;
-      checkIfFavorite();
+      obtainPokemonDb();
     }
   }
 
@@ -163,9 +163,9 @@ class _PokemonCardState extends State<PokemonCard> {
   }
 
   Future<void> toggleFavorite() async {
-    await db.changeFavorite(int.parse(pokemon.url.split('/')[6]));
+    List<Pokemon> pokemonSingle =  await db.changeFavorite(int.parse(pokemon.url.split('/')[6]));
     setState(() {
-      isFavorite = !isFavorite;
+      isFavorite = pokemonSingle[0].favoriteBool();
     });
   }
 }

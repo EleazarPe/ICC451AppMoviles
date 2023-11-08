@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 
 class Pokemon {
   int id;
+  int favorite;
 
 
   Pokemon({
     required this.id,
+    required this.favorite,
   });
 
 
@@ -13,7 +15,12 @@ class Pokemon {
   Map<String, dynamic> toMap() {
     return {
       'id': id,
+      'favorite': favorite,
     };
+  }
+
+  bool favoriteBool(){
+    return favorite == 1 ? true : false;
   }
 
   // Implement toString to make it easier to see information about

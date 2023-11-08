@@ -5,6 +5,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import '../DTO/PokeList.dart';
 import '../Database/Database.dart';
 import '../DTO/PokeOnly.dart';
+import '../Model/Pokemon.dart';
 import '../Widgets/PokemonCard.dart' as pc;
 import 'PokemonDetailsPage.dart';
 
@@ -18,6 +19,7 @@ class _PokemonListPageState extends State<PokemonListPage> {
   final String apiUrl = "https://pokeapi.co/api/v2/pokemon?limit=50"; // Cambio en el límite inicial
   late PokeList pokemons = PokeList(results: [], count: 0, next: '', previous: '');
   late PokeList pokemonsTemp;
+  late List<Pokemon> pokemonsDb;
   bool _favoriteFilter = false;
   DatabaseHelper db = DatabaseHelper();
 
@@ -28,6 +30,7 @@ class _PokemonListPageState extends State<PokemonListPage> {
   @override
   void initState() {
     super.initState();
+
     fetchPokemons();
     allPokemons();
     _scrollController.addListener(() {
@@ -71,10 +74,14 @@ class _PokemonListPageState extends State<PokemonListPage> {
       });
 
       http.get(Uri.parse("https://pokeapi.co/api/v2/pokemon?limit=5000"))
-          .then((response) {
+          .then((response) async {
         if (response.statusCode == 200) {
           final data = json.decode(response.body);
           PokeList tempPokemons = PokeList.fromJson(data);
+
+          await db.insertAllPokemons(tempPokemons);
+          pokemonsDb = await db.pokemonList();
+
           setState(() {
             pokemonsTemp = tempPokemons;
             isLoading = false;
@@ -158,16 +165,23 @@ class _PokemonListPageState extends State<PokemonListPage> {
 
   @override
   Widget build(BuildContext context) {
+
     List<Result> displayedPokemons =  (searchString.isEmpty
         ? pokemons.results.where((pokemon) {
+
       final nameLower = pokemon.name.toLowerCase();
       final searchLower = searchString.toLowerCase();
-      return nameLower.contains(searchLower) || (pokemon.url.split('/')[6])==searchLower;
+      bool favoriteDb = pokemonsDb[int.parse(pokemon.url.split('/')[6]) -1].favoriteBool();
+
+      return (nameLower.contains(searchLower) || (pokemon.url.split('/')[6])==searchLower) && (_favoriteFilter == true ? favoriteDb ?? true : true);
+
     }).toList()
         : pokemonsTemp.results.where((pokemon) {
       final nameLower = pokemon.name.toLowerCase();
       final searchLower = searchString.toLowerCase();
-      return nameLower.contains(searchLower) || (pokemon.url.split('/')[6])==searchLower;
+      bool favoriteDb = pokemonsDb[int.parse(pokemon.url.split('/')[6]) -1].favoriteBool();
+
+      return (nameLower.contains(searchLower) || (pokemon.url.split('/')[6])==searchLower) && _favoriteFilter == favoriteDb;
     }).toList());
     if(!searchString.isEmpty){
       fetchAllPokemonData(displayedPokemons);
@@ -186,6 +200,7 @@ class _PokemonListPageState extends State<PokemonListPage> {
 
                 Expanded(
 
+                  // Buscar Pokemon
                   child: TextField(
                     decoration: InputDecoration(
                       hintText: 'Buscar Pokémon',
@@ -209,6 +224,9 @@ class _PokemonListPageState extends State<PokemonListPage> {
               ],
             ),
           ),
+
+
+          // Lista de Pokemon
           Expanded(
             child: GridView.builder(
               controller: _scrollController,
@@ -225,6 +243,8 @@ class _PokemonListPageState extends State<PokemonListPage> {
                     onTap: () {
                       _openPokemonDetails(context, displayedPokemons[index]);
                     },
+
+                    // Pokemon Card
                     child: pc.PokemonCard(
                       pokemon: displayedPokemons[index],
                     ),
@@ -238,6 +258,7 @@ class _PokemonListPageState extends State<PokemonListPage> {
     );
   }
 
+  // Push para ir a los detalles del pokemon
   void _openPokemonDetails(BuildContext context, Result pokemon) {
     setState(() {});
     Navigator.push(
@@ -248,23 +269,30 @@ class _PokemonListPageState extends State<PokemonListPage> {
 
   AppBar appBarDefault(){
     return AppBar(
-      title: Text('Pokedex'),
-      backgroundColor: Color.fromARGB(255, 202, 0, 16),
+      title: const Text('Pokedex'),
+      backgroundColor: const Color.fromARGB(255, 202, 0, 16),
       actions: [
 
         IconButton(
-            onPressed: () {
+            onPressed: () async {
               _favoriteFilter = !_favoriteFilter;
-              setState(() {});
+              await getPokemonDB();
+              setState(() {
+
+              });
               },
             icon: _favoriteFilter ?
-            Icon(Icons.favorite_outlined, color: Colors.red,) :
-            Icon(Icons.favorite_border)
+            const Icon(Icons.favorite_outlined, color: Colors.red,) :
+            const Icon(Icons.favorite_border)
         ),
       ],
     );
   }
 
+  Future<void> getPokemonDB() async {
+    List<Pokemon> list = await db.pokemonList();
+    pokemonsDb = list;
+  }
 
 
 }
