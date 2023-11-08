@@ -50,6 +50,8 @@ class _PokemonDetailsPageState extends State<PokemonDetailsPage> {
   @override
   Widget build(BuildContext context) {
 
+
+
     return FutureBuilder(future: db.isFavorite(id), builder: (context, snapshot) {
       return Scaffold(
         appBar: appBarDefault(),

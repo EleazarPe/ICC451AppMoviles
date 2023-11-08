@@ -3,11 +3,13 @@ import 'package:flutter/material.dart';
 class Pokemon {
   int id;
   int favorite;
+  String name;
 
 
   Pokemon({
     required this.id,
     required this.favorite,
+    required this.name,
   });
 
 
@@ -16,6 +18,7 @@ class Pokemon {
     return {
       'id': id,
       'favorite': favorite,
+      'name': name,
     };
   }
 

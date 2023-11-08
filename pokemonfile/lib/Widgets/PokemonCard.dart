@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:pokemonfile/Model/Pokemon.dart';
 import '../DTO/PokeList.dart';
 import '../Database/Database.dart';
 import '../DTO/PokeOnly.dart';
@@ -11,44 +10,43 @@ import '../Model/Pokemon.dart';
 
 class PokemonCard extends StatefulWidget {
   final Result pokemon;
+  final Pokemon pokemonDB;
   final DatabaseHelper db = DatabaseHelper();
 
-  PokemonCard({Key? key, required this.pokemon}) : super(key: key);
+  PokemonCard({Key? key, required this.pokemon, required this.pokemonDB}) : super(key: key);
 
   @override
-  State<PokemonCard> createState() => _PokemonCardState(pokemon: pokemon, db: db);
+  State<PokemonCard> createState() =>
+      _PokemonCardState(
+        db: db,
+        pokemon: pokemon,
+        pokemonDb: pokemonDB,
+      );
 }
 
 class _PokemonCardState extends State<PokemonCard> {
+
+  final DatabaseHelper db;
   late Result pokemon;
   late Pokemon pokemonDb;
-  final DatabaseHelper db;
-  late bool isFavorite = false; // Inicialización por defecto
 
   _PokemonCardState({
-    required this.pokemon,
     required this.db,
+    required this.pokemon,
+    required this.pokemonDb
   });
 
   @override
   void initState() {
     super.initState();
-    obtainPokemonDb();
-  }
-
-
-  void obtainPokemonDb() async {
-    List<Pokemon> pokemonList = await db.pokemonId(int.parse(pokemon.url.split('/')[6]));
-    pokemonDb = pokemonList[0];
-    isFavorite = pokemonDb.favorite == 1 ? true : false;
   }
 
   @override
   void didUpdateWidget(covariant PokemonCard oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (oldWidget.pokemon != widget.pokemon) {
+    if (oldWidget.pokemon != widget.pokemon || oldWidget.pokemonDB != widget.pokemonDB) {
       pokemon = widget.pokemon;
-      obtainPokemonDb();
+      pokemonDb = widget.pokemonDB;
     }
   }
 
@@ -71,7 +69,7 @@ class _PokemonCardState extends State<PokemonCard> {
                       alignment: Alignment.topLeft,
                       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
                       child: Text(
-                        '${int.parse(pokemon.url.split('/')[6])}',
+                        '${pokemonDb.id}',
                         style: const TextStyle(
                           color: Colors.blueGrey,
                           fontWeight: FontWeight.bold,
@@ -89,7 +87,7 @@ class _PokemonCardState extends State<PokemonCard> {
                     ),
                     Center(
                       child: CachedNetworkImage(
-                        imageUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/${int.parse(pokemon.url.split('/')[6])}.png',
+                        imageUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/${pokemonDb.id}.png',
                         placeholder: (context, url) => const Center(child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Colors.red))),
                         errorWidget: (context, url, error) => const Icon(Icons.error),
                         fit: BoxFit.cover,
@@ -98,7 +96,7 @@ class _PokemonCardState extends State<PokemonCard> {
                     Container(
                       alignment: Alignment.topRight,
                       child: IconButton(
-                        icon: isFavorite
+                        icon: pokemonDb.favoriteBool()
                             ? const Icon(Icons.favorite_outlined, color: Colors.red)
                             : const Icon(Icons.favorite_border_outlined),
                         onPressed: () async {
@@ -120,7 +118,7 @@ class _PokemonCardState extends State<PokemonCard> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        pokemon.name,
+                        pokemonDb.name,
                         style: const TextStyle(
                           fontWeight: FontWeight.bold,
                         ),
@@ -163,9 +161,10 @@ class _PokemonCardState extends State<PokemonCard> {
   }
 
   Future<void> toggleFavorite() async {
-    List<Pokemon> pokemonSingle =  await db.changeFavorite(int.parse(pokemon.url.split('/')[6]));
+    await db.changeFavorite(pokemonDb.id);
+    List<Pokemon> pokemonSingle = await db.pokemonId(pokemonDb.id);
     setState(() {
-      isFavorite = pokemonSingle[0].favoriteBool();
+      pokemonDb.favorite = pokemonSingle[0].favorite;
     });
   }
 }

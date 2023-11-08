@@ -16,6 +16,9 @@ class PokemonListPage extends StatefulWidget {
 }
 
 class _PokemonListPageState extends State<PokemonListPage> {
+
+  bool isLoading = false;
+
   final String apiUrl = "https://pokeapi.co/api/v2/pokemon?limit=50"; // Cambio en el límite inicial
   late PokeList pokemons = PokeList(results: [], count: 0, next: '', previous: '');
   late PokeList pokemonsTemp;
@@ -23,7 +26,6 @@ class _PokemonListPageState extends State<PokemonListPage> {
   bool _favoriteFilter = false;
   DatabaseHelper db = DatabaseHelper();
 
-  bool isLoading = false;
   ScrollController _scrollController = ScrollController();
   String searchString = '';
 
@@ -188,8 +190,8 @@ class _PokemonListPageState extends State<PokemonListPage> {
     }
     //fetchAllPokemonData(displayedPokemons);
 
-
-    return Scaffold(
+    return
+    Scaffold(
       appBar: appBarDefault(),
       body: Column(
         children: [
@@ -237,6 +239,7 @@ class _PokemonListPageState extends State<PokemonListPage> {
               ),
               itemCount: displayedPokemons.length,
               itemBuilder: (context, index) {
+
                 return Padding(
                   padding: EdgeInsets.all(8),
                   child: GestureDetector(
@@ -247,6 +250,7 @@ class _PokemonListPageState extends State<PokemonListPage> {
                     // Pokemon Card
                     child: pc.PokemonCard(
                       pokemon: displayedPokemons[index],
+                      pokemonDB: pokemonsDb[index],
                     ),
                   ),
                 );

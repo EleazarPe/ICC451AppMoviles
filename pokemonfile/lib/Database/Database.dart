@@ -31,18 +31,10 @@ class DatabaseHelper {
     await db.execute(
       'CREATE TABLE pokemons('
           'id INTEGER PRIMARY KEY, '
-          'favorite INTEGER'
+          'favorite INTEGER, '
+          'name STRING'
           ')',
     );
-
-    //TODO: No es la mejor implementacion para los favoritos, para un futuro es mejor tener la tabla de los favoritos separada de los pokemones.
-    // Create tables
-    /*await db.execute(
-      'CREATE TABLE favorites('
-          'id INTEGER PRIMARY KEY, '
-          'favorite BOOLEAN'
-          ')',
-    );*/
 
   }
 
@@ -72,6 +64,7 @@ class DatabaseHelper {
       return Pokemon(
         id: maps[i]['id'] as int,
         favorite: maps[i]['favorite'] as int,
+        name: maps[i]['name'] as String,
       );
     });
 
@@ -94,13 +87,9 @@ class DatabaseHelper {
       return Pokemon(
         id: maps[i]['id'] as int,
         favorite: maps[i]['favorite'] as int,
+        name: maps[i]['name'] as String,
       );
     });
-
-    if (pokemonList.isEmpty){
-      insertPokemon(Pokemon(id: id, favorite: 0));
-      pokemonList = await pokemonId(id);
-    }
 
     return pokemonList;
 
@@ -140,11 +129,7 @@ class DatabaseHelper {
     // Hacer una llamada a la base de datos
     List<Pokemon> pokemon = await pokemonId(id);
 
-    // Revisar si algun pokemon esta registrado a ese id, si no lo esta insertalo.
-    if(pokemon.isEmpty){
-      insertPokemon(Pokemon(id: id, favorite: 0));
-    }
-    else{
+    if(pokemon.isNotEmpty){
       ret = pokemon[0].favorite == 1 ? true : false;
     }
 
@@ -153,12 +138,11 @@ class DatabaseHelper {
   }
 
   // Cambiar el estado de favorito de un pokemon
-  Future<List<Pokemon>> changeFavorite(int id) async {
+  Future<void> changeFavorite(int id) async {
 
     List<Pokemon> pokemon = await pokemonId(id);
     if(pokemon.isEmpty){
-      insertPokemon(Pokemon(id: id, favorite: 0));
-      return pokemonId(id);
+      return;
     }
     if (pokemon[0].favorite == 1){
       pokemon[0].favorite = 0;
@@ -167,8 +151,6 @@ class DatabaseHelper {
       pokemon[0].favorite = 1;
       await updatePokemon(pokemon[0]);
     }
-
-    return pokemon;
   }
 
   Future<void> insertAllPokemons(PokeList tempPokemons) async {
@@ -186,13 +168,16 @@ class DatabaseHelper {
 
       batch.insert(
           'pokemons',
-          Pokemon(id: int.parse(element.url.split('/')[6]), favorite: 0).toMap(),
+          Pokemon(
+              id: int.parse(element.url.split('/')[6]),
+              favorite: 0,
+              name: element.name,
+          ).toMap(),
           conflictAlgorithm: ConflictAlgorithm.replace
       );
       //await insertPokemon(Pokemon(id: int.parse(element.url.split('/')[6]), favorite: 0));
     });
     batch.commit();
-
 
   }
 }
