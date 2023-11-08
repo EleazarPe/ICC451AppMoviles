@@ -184,7 +184,7 @@ class _PokemonListPageState extends State<PokemonListPage> {
               final searchLower = searchString.toLowerCase();
               bool favoriteDb = getPokemonId(pokemonsDb, int.parse(pokemon.url.split('/')[6])).favoriteBool();
 
-              return (nameLower.contains(searchLower) || (pokemon.url.split('/')[6])==searchLower) && _favoriteFilter == favoriteDb;
+              return (nameLower.contains(searchLower) || (pokemon.url.split('/')[6])==searchLower) && (_favoriteFilter == true ? favoriteDb ?? true : true);
 
             }).toList()
     );
