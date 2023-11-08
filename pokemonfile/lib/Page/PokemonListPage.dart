@@ -168,24 +168,27 @@ class _PokemonListPageState extends State<PokemonListPage> {
   @override
   Widget build(BuildContext context) {
 
-    List<Result> displayedPokemons =  (searchString.isEmpty
-        ? pokemons.results.where((pokemon) {
+    List<Result> displayedPokemons =  (
+        searchString.isEmpty ?
 
-      final nameLower = pokemon.name.toLowerCase();
-      final searchLower = searchString.toLowerCase();
-      bool favoriteDb = pokemonsDb[int.parse(pokemon.url.split('/')[6]) -1].favoriteBool();
+        pokemons.results.where((pokemon) {
+          final nameLower = pokemon.name.toLowerCase();
+          final searchLower = searchString.toLowerCase();
+          bool favoriteDb = pokemonsDb[int.parse(pokemon.url.split('/')[6]) -1].favoriteBool();
 
-      return (nameLower.contains(searchLower) || (pokemon.url.split('/')[6])==searchLower) && (_favoriteFilter == true ? favoriteDb ?? true : true);
+          return (nameLower.contains(searchLower) || (pokemon.url.split('/')[6])==searchLower) && (_favoriteFilter == true ? favoriteDb ?? true : true);
+        }).toList()
 
-    }).toList()
-        : pokemonsTemp.results.where((pokemon) {
-      final nameLower = pokemon.name.toLowerCase();
-      final searchLower = searchString.toLowerCase();
-      bool favoriteDb = pokemonsDb[int.parse(pokemon.url.split('/')[6]) -1].favoriteBool();
+            : pokemonsTemp.results.where((pokemon) {
+              final nameLower = pokemon.name.toLowerCase();
+              final searchLower = searchString.toLowerCase();
+              bool favoriteDb = pokemonsDb[int.parse(pokemon.url.split('/')[6]) -1].favoriteBool();
 
-      return (nameLower.contains(searchLower) || (pokemon.url.split('/')[6])==searchLower) && _favoriteFilter == favoriteDb;
-    }).toList());
-    if(!searchString.isEmpty){
+              return (nameLower.contains(searchLower) || (pokemon.url.split('/')[6])==searchLower) && _favoriteFilter == favoriteDb;
+
+            }).toList()
+    );
+    if(searchString.isNotEmpty){
       fetchAllPokemonData(displayedPokemons);
     }
     //fetchAllPokemonData(displayedPokemons);
@@ -250,7 +253,7 @@ class _PokemonListPageState extends State<PokemonListPage> {
                     // Pokemon Card
                     child: pc.PokemonCard(
                       pokemon: displayedPokemons[index],
-                      pokemonDB: pokemonsDb[int.parse(displayedPokemons[index].url.split('/')[6])-1],
+                      pokemonDB: pokemonsDb[int.parse(displayedPokemons[index].url.split('/')[6])],
                     ),
                   ),
                 );
