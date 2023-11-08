@@ -4,7 +4,7 @@
 
 # Base de Datos
 La base de datos esta basada en SQLite. Tenemos una clase Pokemon que tiene los tipos
-# Variables:
+## Variables:
 -	  int id PRIMARY KEY;
 -	  int favorite;
 -	  String name;
