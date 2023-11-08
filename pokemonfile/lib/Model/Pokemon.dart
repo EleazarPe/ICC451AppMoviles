@@ -30,6 +30,18 @@ class Pokemon {
   // each dog when using the print statement.
 }
 
+Pokemon getPokemonId(List<Pokemon> pokemons, int id){
+
+  Pokemon ret = pokemons[0];
+  for (var element in pokemons) {
+    if (element.id == id){
+      return element;
+    }
+  }
+
+  return ret;
+}
+
 Color getColorForElement(String element) {
   if (element == 'fire') {
     return Colors.red;

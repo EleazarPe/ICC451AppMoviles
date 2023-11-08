@@ -174,7 +174,7 @@ class _PokemonListPageState extends State<PokemonListPage> {
         pokemons.results.where((pokemon) {
           final nameLower = pokemon.name.toLowerCase();
           final searchLower = searchString.toLowerCase();
-          bool favoriteDb = pokemonsDb[int.parse(pokemon.url.split('/')[6]) -1].favoriteBool();
+          bool favoriteDb = getPokemonId(pokemonsDb, int.parse(pokemon.url.split('/')[6])).favoriteBool();
 
           return (nameLower.contains(searchLower) || (pokemon.url.split('/')[6])==searchLower) && (_favoriteFilter == true ? favoriteDb ?? true : true);
         }).toList()
@@ -182,7 +182,7 @@ class _PokemonListPageState extends State<PokemonListPage> {
             : pokemonsTemp.results.where((pokemon) {
               final nameLower = pokemon.name.toLowerCase();
               final searchLower = searchString.toLowerCase();
-              bool favoriteDb = pokemonsDb[int.parse(pokemon.url.split('/')[6]) -1].favoriteBool();
+              bool favoriteDb = getPokemonId(pokemonsDb, int.parse(pokemon.url.split('/')[6])).favoriteBool();
 
               return (nameLower.contains(searchLower) || (pokemon.url.split('/')[6])==searchLower) && _favoriteFilter == favoriteDb;
 
@@ -253,7 +253,7 @@ class _PokemonListPageState extends State<PokemonListPage> {
                     // Pokemon Card
                     child: pc.PokemonCard(
                       pokemon: displayedPokemons[index],
-                      pokemonDB: pokemonsDb[int.parse(displayedPokemons[index].url.split('/')[6])],
+                      pokemonDB: getPokemonId(pokemonsDb, int.parse(displayedPokemons[index].url.split('/')[6])),
                     ),
                   ),
                 );
