@@ -7,7 +7,6 @@ La base de datos esta basada en SQLite. Tenemos una clase Pokemon que tiene los 
 -	id, int primary key
 -	favorite, int
 -	name, String
--	
 # Integracion de API
 Nuestra principal fuente de informacion para obtener nombre y id de los pokemones proviene de: "https://pokeapi.co/api/v2/pokemon/". Para la cual recurrimos a utilizar un DTO llamado PokeList.dart donde luego de realizar una consulta http el resultado lo instanciamos.
 Segunda fuente de informacion para los detalles e informacion de pokemones proviene de:
