@@ -250,7 +250,7 @@ class _PokemonListPageState extends State<PokemonListPage> {
                     // Pokemon Card
                     child: pc.PokemonCard(
                       pokemon: displayedPokemons[index],
-                      pokemonDB: pokemonsDb[index],
+                      pokemonDB: pokemonsDb[int.parse(displayedPokemons[index].url.split('/')[6])-1],
                     ),
                   ),
                 );
