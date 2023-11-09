@@ -33,8 +33,9 @@ class _PokemonListPageState extends State<PokemonListPage> {
   void initState() {
     super.initState();
 
-    fetchPokemons();
     allPokemons();
+    fetchPokemons();
+
     _scrollController.addListener(() {
       if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent * 0.2) {
         fetchMorePokemons();
@@ -43,7 +44,9 @@ class _PokemonListPageState extends State<PokemonListPage> {
 
   }
 
+  // Fetch Pokemons from db and API calls.
   void fetchPokemons() async{
+
     http.get(Uri.parse(apiUrl)).then((response) async {
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
@@ -69,29 +72,49 @@ class _PokemonListPageState extends State<PokemonListPage> {
     });
   }
 
+  // load all pokemons
   void allPokemons() {
     if (!isLoading) {
       setState(() {
         isLoading = true;
       });
 
-      http.get(Uri.parse("https://pokeapi.co/api/v2/pokemon?limit=5000"))
-          .then((response) async {
+      // API call para obtener la cantidad total de pokemones
+      http.get(Uri.parse("https://pokeapi.co/api/v2/pokemon?limit=0")).then((response) async {
         if (response.statusCode == 200) {
           final data = json.decode(response.body);
-          PokeList tempPokemons = PokeList.fromJson(data);
+          PokeList count = PokeList.fromJson(data);
 
-          await db.insertAllPokemons(tempPokemons);
-          pokemonsDb = await db.pokemonList();
+          // API call para obtener la lista de todos los pokemones
+          http.get(Uri.parse("https://pokeapi.co/api/v2/pokemon?limit=${count.count}")).then((response) async {
+            if (response.statusCode == 200) {
 
-          setState(() {
-            pokemonsTemp = tempPokemons;
-            isLoading = false;
+              // Obtener la lista del Json
+              final data = json.decode(response.body);
+              pokemonsTemp = PokeList.fromJson(data);
+
+              // Insertar y obtener los pokemones de la base de datos
+              await db.insertAllPokemons(pokemonsTemp);
+              pokemonsDb = await db.pokemonList();
+
+              setState(() {
+                isLoading = false;
+              });
+
+            } else {
+              pokemonsDb = await db.pokemonList();
+              throw Exception('Failed to make API call');
+            }
+          }).catchError((error) async {
+            pokemonsDb = await db.pokemonList();
+            print('Error: $error');
           });
+
         } else {
-          throw Exception('Failed to load more pokemons');
+          throw Exception('Failed to make API call');
         }
-      }).catchError((error) {
+      }).catchError((error) async {
+        pokemonsDb = await db.pokemonList();
         print('Error: $error');
       });
     }
@@ -217,11 +240,11 @@ class _PokemonListPageState extends State<PokemonListPage> {
                       setState(() {
                         searchString = value;
                       });
-                    },style: TextStyle(fontSize: 14.0),
+                    },style: const TextStyle(fontSize: 14.0),
                   ),
                 ),
                 IconButton(
-                  icon: Icon(Icons.search),
+                  icon: const Icon(Icons.search),
                   onPressed: () {
                     FocusScope.of(context).unfocus();
                   },
@@ -247,7 +270,7 @@ class _PokemonListPageState extends State<PokemonListPage> {
                   padding: EdgeInsets.all(8),
                   child: GestureDetector(
                     onTap: () {
-                      _openPokemonDetails(context, displayedPokemons[index]);
+                      _openPokemonDetails(context, getPokemonId(pokemonsDb, int.parse(displayedPokemons[index].url.split('/')[6])));
                     },
 
                     // Pokemon Card
@@ -266,11 +289,11 @@ class _PokemonListPageState extends State<PokemonListPage> {
   }
 
   // Push para ir a los detalles del pokemon
-  void _openPokemonDetails(BuildContext context, Result pokemon) {
+  void _openPokemonDetails(BuildContext context, Pokemon pokemon) {
     setState(() {});
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => PokemonDetailsPage(pokemonBasic: pokemon)),
+      MaterialPageRoute(builder: (context) => PokemonDetailsPage(pokemonDB: pokemon)),
     );
   }
 

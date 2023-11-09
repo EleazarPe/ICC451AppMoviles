@@ -10,40 +10,33 @@ import '../Model/Pokemon.dart';
 import '../Widgets/PokemonCard.dart' as pc;
 
 class PokemonDetailsPage extends StatefulWidget {
-  final Result pokemonBasic;
+  final Pokemon pokemonDB;
 
-  PokemonDetailsPage({required this.pokemonBasic});
+  PokemonDetailsPage({required this.pokemonDB});
 
   @override
-  _PokemonDetailsPageState createState() => _PokemonDetailsPageState(pokemonBasic: pokemonBasic);
+  _PokemonDetailsPageState createState() => _PokemonDetailsPageState(pokemonDB: pokemonDB);
 }
 
 class _PokemonDetailsPageState extends State<PokemonDetailsPage> {
 
-  static const double _statsVerticalLength = 12.0;
-
+  _PokemonDetailsPageState({required this.pokemonDB});
 
   DatabaseHelper db = DatabaseHelper();
-  
-  final Result pokemonBasic;
+  late final Pokemon pokemonDB;
   late PokeOnly pokemonDetails;
-  
-  late bool _favoriteState = false;
   late bool loading = true;
+
+  static const double _statsVerticalLength = 12.0;
   
   late PageController _pageController;
   int _currentPage = 0;
-  late int id = 1;
-
-  _PokemonDetailsPageState({required this.pokemonBasic});
 
   @override
   void initState() {
     super.initState();
-    id = int.parse(pokemonBasic.url.split('/')[6]);
-
-    checkfavorite();
     loadPokemonDetails();
+    updatePokemonDB();
     _pageController = PageController(initialPage: _currentPage);
   }
 
@@ -52,13 +45,12 @@ class _PokemonDetailsPageState extends State<PokemonDetailsPage> {
 
 
 
-    return FutureBuilder(future: db.isFavorite(id), builder: (context, snapshot) {
-      return Scaffold(
-        appBar: appBarDefault(),
-        body: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            SizedBox(
+    return Scaffold(
+      appBar: appBarDefault(),
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          SizedBox(
               height: 200, // Ajusta el tamaño según la imagen del Pokémon
               child: Stack(
 
@@ -77,12 +69,11 @@ class _PokemonDetailsPageState extends State<PokemonDetailsPage> {
 
                   // Imagen del pokemon
                   Container(
-                    child: Image.network(
-                      'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/$id.png',
-                    ),
-
                     alignment: Alignment.center,
-                    padding: EdgeInsets.all(5.0),
+                    padding: const EdgeInsets.all(5.0),
+                    child: Image.network(
+                      'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/${pokemonDB.id}.png',
+                    ),
                   ),
 
                 ],
@@ -119,7 +110,6 @@ class _PokemonDetailsPageState extends State<PokemonDetailsPage> {
           ],
         ),
       );
-    });
   }
 
   Widget _buildNavigationItem(int index, String title) {
@@ -130,11 +120,11 @@ class _PokemonDetailsPageState extends State<PokemonDetailsPage> {
           _pageController.animateToPage(index, duration: Duration(milliseconds: 300), curve: Curves.ease);
         });
       },
+      style: TextButton.styleFrom(primary: _currentPage == index ? Colors.blue : Colors.grey),
       child: Text(
         title,
         style: TextStyle(fontSize: 16),
       ),
-      style: TextButton.styleFrom(primary: _currentPage == index ? Colors.blue : Colors.grey),
     );
   }
 
@@ -688,28 +678,28 @@ class _PokemonDetailsPageState extends State<PokemonDetailsPage> {
   // AppBar para la pagina de detalles
   AppBar appBarDefault(){
     return AppBar(
-        title: Text(pokemonBasic.name),
+        title: Text(pokemonDB.name),
         //backgroundColor: Color.fromARGB(255, 202, 0, 16),
-        backgroundColor: loading ? Color.fromARGB(255, 202, 0, 16) : getColorForElement(pokemonDetails.types[0].type.name),
+        backgroundColor: loading ? const Color.fromARGB(255, 202, 0, 16) : getColorForElement(pokemonDetails.types[0].type.name),
 
         actions: [
           Container(
             alignment: Alignment.centerRight,
-            child: Text('$id',
+            child: Text('${pokemonDB.id}',
               textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 24),
+              style: const TextStyle(fontSize: 24),
             ),
           ),
 
           // Favorite Icon
           IconButton(
-            icon: _favoriteState ?
+            icon: pokemonDB.favoriteBool() ?
             const Icon(Icons.favorite_outlined, color: Colors.red,) :
             const Icon(Icons.favorite_border_outlined) ,
             onPressed: () async {
-              await db.changeFavorite(id);
-              setState(() {});
-                _favoriteState = !_favoriteState;
+              await db.changeFavorite(pokemonDB.id);
+              updatePokemonDB();
+
               },
           ),
 
@@ -717,21 +707,10 @@ class _PokemonDetailsPageState extends State<PokemonDetailsPage> {
         ]
     );
   }
-  
-  // saber si un pokemon esta como favorito o no
-  void checkfavorite() async {
-
-    db.isFavorite(id).then((value) {
-      setState(() {
-        _favoriteState = value;
-      });
-    });
-
-  }
 
   // Cargar los detalles del pokemon
   void loadPokemonDetails() async {
-    http.get(Uri.parse('https://pokeapi.co/api/v2/pokemon/$id/')).then((response) {
+    http.get(Uri.parse('https://pokeapi.co/api/v2/pokemon/${pokemonDB.id}/')).then((response) {
 
       if (response.statusCode == 200){
         final data = json.decode(response.body);
@@ -742,11 +721,19 @@ class _PokemonDetailsPageState extends State<PokemonDetailsPage> {
         });
 
       }else{
-        throw Exception('Failed to load details for pokemon $id');
+        throw Exception('Failed to load details for pokemon ${pokemonDB.id}');
       }
 
     });
     
+  }
+
+  Future<void> updatePokemonDB() async {
+
+    List<Pokemon> list = await db.pokemonId(pokemonDB.id);
+    pokemonDB = list[0];
+    setState(() {});
+
   }
 
 }
