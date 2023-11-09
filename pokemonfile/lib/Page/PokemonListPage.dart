@@ -126,24 +126,12 @@ class _PokemonListPageState extends State<PokemonListPage> {
         isLoading = true;
       });
 
-      final response = await http.get(Uri.parse("https://pokeapi.co/api/v2/pokemon?limit=50&offset=${pokemons.results.length}")); // Carga 50 mas
+      final response = await http.get(Uri.parse("https://pokeapi.co/api/v2/pokemon?limit=100&offset=${pokemons.results.length}")); // Carga 50 mas
       if (response.statusCode == 200) {
-        final data = json.decode(response.body);
-        //List<dynamic> results = data['results'];
-        PokeList tempPokemons = PokeList.fromJson(data);
-        int temp =0;
-        for (var element in tempPokemons.results) {
-          http.Response pokemonResponse = await http.get(Uri.parse(element.url));
 
-          if (pokemonResponse.statusCode == 200) {
-            final pokemonData = json.decode(pokemonResponse.body);
-            element.pokemon = PokeOnly.fromJson(pokemonData);
-          } else {
-            throw Exception('Failed to load pokemon info');
-          }
-          print(temp);
-          temp++;
-        }
+        final data = json.decode(response.body);
+        PokeList tempPokemons = PokeList.fromJson(data);
+
         setState(() {
           pokemons.results.addAll(tempPokemons.results);
           isLoading = false;
@@ -154,7 +142,7 @@ class _PokemonListPageState extends State<PokemonListPage> {
     }
   }
 
-  Future<String> fetchPokemonData(String pokemonUrl) async {
+/*  Future<String> fetchPokemonData(String pokemonUrl) async {
     try {
       http.Response pokemonResponse = await http.get(Uri.parse(pokemonUrl));
       if (pokemonResponse.statusCode == 200) {
@@ -166,9 +154,9 @@ class _PokemonListPageState extends State<PokemonListPage> {
       print('Error: $error');
       return '';
     }
-  }
+  }*/
 
-  Future<void> fetchAndSetPokemonData(Result pokemon) async {
+/*  Future<void> fetchAndSetPokemonData(Result pokemon) async {
     try {
       String pokemonData = await fetchPokemonData(pokemon.url);
       pokemon.pokemon = PokeOnly.fromJson(json.decode(pokemonData));
@@ -176,8 +164,8 @@ class _PokemonListPageState extends State<PokemonListPage> {
       print('Error fetching Pokémon data: $error');
       // Manejo de errores
     }
-  }
-  Future<void> fetchAllPokemonData(List<Result> displayedPokemons) async {
+  }*/
+/*  Future<void> fetchAllPokemonData(List<Result> displayedPokemons) async {
     final futures = <Future>[];
 
     for (var pokemon in displayedPokemons) {
@@ -187,7 +175,7 @@ class _PokemonListPageState extends State<PokemonListPage> {
     }
 
     await Future.wait(futures);
-  }
+  }*/
 
   @override
   Widget build(BuildContext context) {
@@ -213,7 +201,7 @@ class _PokemonListPageState extends State<PokemonListPage> {
             }).toList()
     );
     if(searchString.isNotEmpty){
-      fetchAllPokemonData(displayedPokemons);
+      //fetchAllPokemonData(displayedPokemons);
     }
     //fetchAllPokemonData(displayedPokemons);
 
@@ -322,7 +310,9 @@ class _PokemonListPageState extends State<PokemonListPage> {
 
   Future<void> getPokemonDB() async {
     List<Pokemon> list = await db.pokemonList();
-    pokemonsDb = list;
+    setState(() {
+      pokemonsDb = list;
+    });
   }
 
 

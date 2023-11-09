@@ -142,12 +142,10 @@ class _PokemonCardState extends State<PokemonCard> {
 
   Future<void> toggleFavorite() async {
     await db.changeFavorite(pokemonDb.id);
-    List<Pokemon> pokemonSingle = await db.pokemonId(pokemonDb.id);
-    setState(() {
-      pokemonDb.favorite = pokemonSingle[0].favorite;
-    });
+    updatePokemonInfo();
   }
 
+  // The old way of creating the boxes for pokemon types
   List<Widget> boxPokemonTypeTemp(){
 
     return pokemon.pokemon?.types.map((element) {
@@ -199,6 +197,8 @@ class _PokemonCardState extends State<PokemonCard> {
             ),
           ),
           ));
+
+      loadPokemonTypes();
       return ret;
     }
 
@@ -246,5 +246,47 @@ class _PokemonCardState extends State<PokemonCard> {
 
     return ret;
   }
+
+  // Cargar los tipos de pokemon
+  Future<void> loadPokemonTypes() async {
+
+    String url = "https://pokeapi.co/api/v2/pokemon/${pokemonDb.id}/";
+
+    http.Response pokemonResponse = await http.get(Uri.parse(url));
+
+    if (pokemonResponse.statusCode == 200) {
+
+      final pokemonData = json.decode(pokemonResponse.body);
+
+      PokeOnly pokeOnly = PokeOnly.fromJson(pokemonData);
+
+      if (pokeOnly.types != null)
+
+      if (pokeOnly.types.length == 2){
+        pokemonDb.type1 = pokeOnly.types[0].type.name;
+        pokemonDb.type2 = pokeOnly.types[1].type.name;
+      }else{
+        pokemonDb.type1 = pokeOnly.types[0].type.name;
+        pokemonDb.type2 = "";
+      }
+
+      await db.updatePokemon(pokemonDb);
+      updatePokemonInfo();
+
+    } else {
+      throw Exception('Failed to load pokemon info');
+    }
+
+  }
+
+  // Obtener una nueva informacion del pokemon y hacer un set state
+  Future<void> updatePokemonInfo() async {
+    List<Pokemon> pokemonSingle = await db.pokemonId(pokemonDb.id);
+    setState(() {
+      pokemonDb = pokemonSingle[0];
+    });
+  }
+
+
 
 }
