@@ -123,30 +123,28 @@ class _PokemonCardState extends State<PokemonCard> {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
+
+                      // Show the pokemon type
                       Row(
                         children: pokemon.pokemon?.types.map((element) {
-                          if (element != null) {
-                            Color color = getColorForElement(element.type.name);
-                            Color textColor = textColorForBackground(color);
-                            return Expanded(
-                              child: Container(
-                                margin: const EdgeInsets.only(left: 3.0, right: 3.0, top: 5.0),
-                                padding: const EdgeInsets.only(top: 6.0, bottom: 6.0),
-                                decoration: BoxDecoration(
-                                  color: color,
-                                  borderRadius: BorderRadius.circular(8.0),
-                                ),
-                                child: Text(
-                                  element.type.name,
-                                  style: TextStyle(color: textColor),
-                                  textAlign: TextAlign.center,
-                                ),
+                          Color color = getColorForElement(element.type.name);
+                          Color textColor = textColorForBackground(color);
+                          return Expanded(
+                            child: Container(
+                              margin: const EdgeInsets.only(left: 3.0, right: 3.0, top: 5.0),
+                              padding: const EdgeInsets.only(top: 6.0, bottom: 6.0),
+                              decoration: BoxDecoration(
+                                color: color,
+                                borderRadius: BorderRadius.circular(8.0),
                               ),
-                            );
-                          } else {
-                            return const SizedBox();
-                          }
-                        })?.toList() ?? [],
+                              child: Text(
+                                element.type.name,
+                                style: TextStyle(color: textColor),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                          );
+                        }).toList() ?? [],
                       ),
 
                     ],

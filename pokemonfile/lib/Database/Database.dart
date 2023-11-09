@@ -32,7 +32,9 @@ class DatabaseHelper {
       'CREATE TABLE pokemons('
           'id INTEGER PRIMARY KEY, '
           'favorite INTEGER, '
-          'name STRING'
+          'name STRING, '
+          'type1 STRING, '
+          'type2 STRING'
           ')',
     );
 
@@ -65,6 +67,8 @@ class DatabaseHelper {
         id: maps[i]['id'] as int,
         favorite: maps[i]['favorite'] as int,
         name: maps[i]['name'] as String,
+        type1: maps[i]['type1'] as String,
+        type2: maps[i]['type2'] as String,
       );
     });
 
@@ -88,6 +92,8 @@ class DatabaseHelper {
         id: maps[i]['id'] as int,
         favorite: maps[i]['favorite'] as int,
         name: maps[i]['name'] as String,
+        type1: maps[i]['type1'] as String,
+        type2: maps[i]['type2'] as String,
       );
     });
 
@@ -169,9 +175,11 @@ class DatabaseHelper {
       batch.insert(
           'pokemons',
           Pokemon(
-              id: int.parse(element.url.split('/')[6]),
-              favorite: 0,
-              name: element.name,
+            id: int.parse(element.url.split('/')[6]),
+            favorite: 0,
+            name: element.name,
+            type1: "",
+            type2: "",
           ).toMap(),
           conflictAlgorithm: ConflictAlgorithm.replace
       );

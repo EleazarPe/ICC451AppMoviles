@@ -4,12 +4,16 @@ class Pokemon {
   int id;
   int favorite;
   String name;
+  String? type1;
+  String? type2;
 
 
   Pokemon({
     required this.id,
     required this.favorite,
     required this.name,
+    required this.type1,
+    required this.type2,
   });
 
 
@@ -19,6 +23,8 @@ class Pokemon {
       'id': id,
       'favorite': favorite,
       'name': name,
+      'type1': type1,
+      'type2': type2,
     };
   }
 
@@ -26,8 +32,22 @@ class Pokemon {
     return favorite == 1 ? true : false;
   }
 
-  // Implement toString to make it easier to see information about
-  // each dog when using the print statement.
+  Pokemon setPokemonType(List<String> types){
+
+    type1 = "";
+    type2 = "";
+
+    if(types.length == 1) {
+      type1 = types[0];
+    }
+    else if (types.length == 2){
+      type1 = types[0];
+      type2 = types[1];
+    }
+
+    return this;
+  }
+
 }
 
 Pokemon getPokemonId(List<Pokemon> pokemons, int id){

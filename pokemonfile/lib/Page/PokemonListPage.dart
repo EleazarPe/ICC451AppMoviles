@@ -37,7 +37,7 @@ class _PokemonListPageState extends State<PokemonListPage> {
     fetchPokemons();
 
     _scrollController.addListener(() {
-      if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent * 0.2) {
+      if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent * 0.1) {
         fetchMorePokemons();
       }
     });
@@ -153,6 +153,7 @@ class _PokemonListPageState extends State<PokemonListPage> {
       }
     }
   }
+
   Future<String> fetchPokemonData(String pokemonUrl) async {
     try {
       http.Response pokemonResponse = await http.get(Uri.parse(pokemonUrl));
