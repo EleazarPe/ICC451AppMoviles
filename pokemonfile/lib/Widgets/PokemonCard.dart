@@ -126,27 +126,9 @@ class _PokemonCardState extends State<PokemonCard> {
 
                       // Show the pokemon type
                       Row(
-                        children: pokemon.pokemon?.types.map((element) {
-                          Color color = getColorForElement(element.type.name);
-                          Color textColor = textColorForBackground(color);
-                          return Expanded(
-                            child: Container(
-                              margin: const EdgeInsets.only(left: 3.0, right: 3.0, top: 5.0),
-                              padding: const EdgeInsets.only(top: 6.0, bottom: 6.0),
-                              decoration: BoxDecoration(
-                                color: color,
-                                borderRadius: BorderRadius.circular(8.0),
-                              ),
-                              child: Text(
-                                element.type.name,
-                                style: TextStyle(color: textColor),
-                                textAlign: TextAlign.center,
-                              ),
-                            ),
-                          );
-                        }).toList() ?? [],
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: boxPokemonType(),
                       ),
-
                     ],
                   ),
                 ),
@@ -165,4 +147,104 @@ class _PokemonCardState extends State<PokemonCard> {
       pokemonDb.favorite = pokemonSingle[0].favorite;
     });
   }
+
+  List<Widget> boxPokemonTypeTemp(){
+
+    return pokemon.pokemon?.types.map((element) {
+      Color color = getColorForElement(element.type.name);
+      Color textColor = textColorForBackground(color);
+      return Expanded(
+        child: Container(
+          margin: const EdgeInsets.only(left: 3.0, right: 3.0, top: 5.0),
+          padding: const EdgeInsets.only(top: 6.0, bottom: 6.0),
+          decoration: BoxDecoration(
+            color: color,
+            borderRadius: BorderRadius.circular(8.0),
+          ),
+          child: Text(
+            element.type.name,
+            style: TextStyle(color: textColor),
+            textAlign: TextAlign.center,
+          ),
+        ),
+      );
+    }).toList() ?? [];
+  }
+
+  // Create the boxes for pokemon types
+  List<Widget> boxPokemonType(){
+
+    List<Widget> ret = [];
+
+    // If types arent loaded
+    if(pokemonDb.type1 == ""){
+      ret.add(
+        Container(
+          child: Expanded(
+            child: Container(
+              margin: const EdgeInsets.only(left: 3.0, right: 3.0, top: 5.0),
+              padding: const EdgeInsets.only(top: 6.0, bottom: 6.0),
+              decoration: BoxDecoration(
+                color: Colors.grey,
+                borderRadius: BorderRadius.circular(8.0),
+
+              ),
+              child: const Text(
+                'loading...',
+                style: TextStyle(
+                  color: Colors.black,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ),
+          ),
+          ));
+      return ret;
+    }
+
+    // If types are loaded
+    else{
+      Color color = getColorForElement(pokemonDb.type1);
+      Color textColor = textColorForBackground(color);
+      ret.add(Expanded(
+        child: Container(
+          margin: const EdgeInsets.only(left: 3.0, right: 3.0, top: 5.0),
+          padding: const EdgeInsets.only(top: 6.0, bottom: 6.0),
+          decoration: BoxDecoration(
+            color: color,
+            borderRadius: BorderRadius.circular(8.0),
+          ),
+          child: Text(
+            pokemonDb.type1,
+            style: TextStyle(color: textColor),
+            textAlign: TextAlign.center,
+          ),
+        ),
+      ));
+    }
+
+    // If there exists a type2
+    if (pokemonDb.type2 != ""){
+      Color color = getColorForElement(pokemonDb.type2);
+      Color textColor = textColorForBackground(color);
+      ret.add(Expanded(
+        child: Container(
+          margin: const EdgeInsets.only(left: 3.0, right: 3.0, top: 5.0),
+          padding: const EdgeInsets.only(top: 6.0, bottom: 6.0),
+          decoration: BoxDecoration(
+            color: color,
+            borderRadius: BorderRadius.circular(8.0),
+          ),
+          child: Text(
+            pokemonDb.type2,
+            style: TextStyle(color: textColor),
+            textAlign: TextAlign.center,
+          ),
+        ),
+      ));
+    }
+
+    return ret;
+  }
+
 }

@@ -4,8 +4,8 @@ class Pokemon {
   int id;
   int favorite;
   String name;
-  String? type1;
-  String? type2;
+  String type1;
+  String type2;
 
 
   Pokemon({
