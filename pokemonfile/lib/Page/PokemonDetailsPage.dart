@@ -86,9 +86,11 @@ class _PokemonDetailsPageState extends State<PokemonDetailsPage> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
+
                   _buildNavigationItem(0, 'Información'),
                   _buildNavigationItem(1, 'Estadísticas'),
                   _buildNavigationItem(2, 'Evoluciones'),
+                  _buildNavigationItem(3, 'Movimientos'),
                 ],
               ),
             ),
@@ -104,6 +106,7 @@ class _PokemonDetailsPageState extends State<PokemonDetailsPage> {
                   _buildSectionInformacion(),
                   _buildSectionEstadisticas(),
                   _buildSection('Evoluciones'),
+                  _buildSectionMovimientos(),
                 ],
               ),
             ),
@@ -113,6 +116,54 @@ class _PokemonDetailsPageState extends State<PokemonDetailsPage> {
   }
 
   Widget _buildNavigationItem(int index, String title) {
+
+    Widget tabIcon =
+    Text(
+      title,
+      style: const TextStyle(fontSize: 16),
+    );
+    switch(index){
+      case 0:{
+        tabIcon = Container(
+          alignment: Alignment.center,
+          child: const Image(
+            image: AssetImage('assets/icons/Info.png'),
+          ),
+        );
+      }
+      break;
+
+      case 1:{
+        tabIcon = Container(
+          alignment: Alignment.center,
+          child: const Image(
+            image: AssetImage('assets/icons/stats.png'),
+          ),
+        );
+      }
+      break;
+
+      case 2:{
+        tabIcon = Container(
+          alignment: Alignment.center,
+          child: const Image(
+            image: AssetImage('assets/icons/evolution.png'),
+          ),
+        );
+      }
+      break;
+
+      case 3:{
+        tabIcon = Container(
+          alignment: Alignment.center,
+          child: const Image(
+            image: AssetImage('assets/icons/tm.png'),
+          ),
+        );
+      }
+      break;
+    }
+
     return TextButton(
       onPressed: () {
         setState(() {
@@ -121,9 +172,10 @@ class _PokemonDetailsPageState extends State<PokemonDetailsPage> {
         });
       },
       style: TextButton.styleFrom(primary: _currentPage == index ? Colors.blue : Colors.grey),
-      child: Text(
-        title,
-        style: TextStyle(fontSize: 16),
+      child: Container(
+        height: 25,
+        alignment: Alignment.center,
+        child: tabIcon,
       ),
     );
   }
@@ -299,6 +351,7 @@ class _PokemonDetailsPageState extends State<PokemonDetailsPage> {
     );
   }
 
+  // Tab de Estadisticas
   Widget _buildSectionEstadisticas() {
     return loading ?
     ListView() :
@@ -645,6 +698,12 @@ class _PokemonDetailsPageState extends State<PokemonDetailsPage> {
     );
   }
 
+  Widget _buildSectionMovimientos() {
+    return loading ?
+    ListView() : ListView();
+
+  }
+
   Widget _buildSection(String sectionName) {
     return loading ?
     ListView() :
@@ -673,6 +732,7 @@ class _PokemonDetailsPageState extends State<PokemonDetailsPage> {
 
     );
   }
+
 
 
   // AppBar para la pagina de detalles
