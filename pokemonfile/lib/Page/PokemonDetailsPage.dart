@@ -698,9 +698,46 @@ class _PokemonDetailsPageState extends State<PokemonDetailsPage> {
     );
   }
 
+  // Tab de Movimientos
   Widget _buildSectionMovimientos() {
     return loading ?
-    ListView() : ListView();
+    ListView() :
+    ListView(
+
+      children: [
+
+        const Padding(
+          padding: EdgeInsets.only(left: 10.0, right: 13.0, bottom: 8.0),
+
+          // Const String "Stats"
+          child : Text(
+            'Movimientos',
+            style: TextStyle(
+              fontSize: 30,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+
+        ListView.builder(
+            scrollDirection: Axis.vertical,
+            controller: ScrollController(),
+            shrinkWrap: true,
+            padding: const EdgeInsets.only(left: 10.0, right: 10.0, bottom: 5.0),
+            itemCount: pokemonDetails.moves.length,
+            itemBuilder:(context, index) {
+              return Container(
+                padding: const EdgeInsets.all(8),
+                child: Card(
+                  child: Text(pokemonDetails.moves[index].move.name),
+                ),
+              );
+            }
+        ),
+
+      ]
+
+    );
 
   }
 
