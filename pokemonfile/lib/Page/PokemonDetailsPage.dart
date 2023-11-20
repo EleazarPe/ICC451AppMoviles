@@ -190,6 +190,19 @@ class _PokemonDetailsPageState extends State<PokemonDetailsPage> {
 
       children: [
 
+        Container(
+          padding: EdgeInsets.symmetric(vertical: 3.0),
+          alignment: Alignment.center,
+          // Const String "Stats"
+          child : const Text(
+            'Información',
+            style: TextStyle(
+              fontSize: 34,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+
         // Padding los tipos del pokemon
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 3.0),
@@ -362,14 +375,14 @@ class _PokemonDetailsPageState extends State<PokemonDetailsPage> {
       children: [
 
         // Padding para String "Estadisticas"
-        const Padding(
+        Container(
           padding: EdgeInsets.symmetric(vertical: 3.0),
-
+          alignment: Alignment.center,
           // Const String "Stats"
-          child : Text(
+          child : const Text(
               'Estadisticas',
               style: TextStyle(
-                fontSize: 30,
+                fontSize: 34,
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -702,7 +715,7 @@ class _PokemonDetailsPageState extends State<PokemonDetailsPage> {
   Widget _buildSectionMovimientos() {
     return loading ?
     ListView() :
-    ListView(
+    Column(
 
       children: [
 
@@ -713,26 +726,34 @@ class _PokemonDetailsPageState extends State<PokemonDetailsPage> {
           child : Text(
             'Movimientos',
             style: TextStyle(
-              fontSize: 30,
+              fontSize: 34,
               fontWeight: FontWeight.bold,
             ),
           ),
         ),
 
+        Expanded(
+            child:
         ListView.builder(
             scrollDirection: Axis.vertical,
             controller: ScrollController(),
             shrinkWrap: true,
-            padding: const EdgeInsets.only(left: 10.0, right: 10.0, bottom: 5.0),
+            padding: const EdgeInsets.all(5.0),
             itemCount: pokemonDetails.moves.length,
             itemBuilder:(context, index) {
-              return Container(
-                padding: const EdgeInsets.all(8),
-                child: Card(
-                  child: Text(pokemonDetails.moves[index].move.name),
-                ),
+              return Card(
+                  elevation: 4,
+                  child: Container(
+                    padding: const EdgeInsets.only(right: 10.0, left: 10.0, top: 10.0, bottom: 10.0),
+                    child: Text(pokemonDetails.moves[index].move.name,
+                      style: TextStyle(
+                        fontSize: 20,
+                      ),
+                    ),
+                  )
               );
             }
+        ),
         ),
 
       ]
