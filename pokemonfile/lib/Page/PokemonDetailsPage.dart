@@ -43,8 +43,6 @@ class _PokemonDetailsPageState extends State<PokemonDetailsPage> {
   @override
   Widget build(BuildContext context) {
 
-
-
     return Scaffold(
       appBar: appBarDefault(),
       body: Column(
@@ -117,65 +115,52 @@ class _PokemonDetailsPageState extends State<PokemonDetailsPage> {
 
   Widget _buildNavigationItem(int index, String title) {
 
-    Widget tabIcon =
-    Text(
-      title,
-      style: const TextStyle(fontSize: 16),
-    );
+    String asset = "placeholder";
     switch(index){
       case 0:{
-        tabIcon = Container(
-          alignment: Alignment.center,
-          child: const Image(
-            image: AssetImage('assets/icons/Info.png'),
-          ),
-        );
+        asset = 'assets/icons/Info.png';
       }
       break;
 
       case 1:{
-        tabIcon = Container(
-          alignment: Alignment.center,
-          child: const Image(
-            image: AssetImage('assets/icons/stats.png'),
-          ),
-        );
+        asset = 'assets/icons/stats.png';
       }
       break;
 
       case 2:{
-        tabIcon = Container(
-          alignment: Alignment.center,
-          child: const Image(
-            image: AssetImage('assets/icons/evolution.png'),
-          ),
-        );
+        asset = 'assets/icons/evolution.png';
       }
       break;
 
       case 3:{
-        tabIcon = Container(
-          alignment: Alignment.center,
-          child: const Image(
-            image: AssetImage('assets/icons/tm.png'),
-          ),
-        );
+        asset = 'assets/icons/tm.png';
       }
       break;
     }
 
-    return TextButton(
-      onPressed: () {
-        setState(() {
-          _currentPage = index;
-          _pageController.animateToPage(index, duration: Duration(milliseconds: 300), curve: Curves.ease);
-        });
-      },
-      style: TextButton.styleFrom(primary: _currentPage == index ? Colors.blue : Colors.grey),
+    return Expanded (
+
       child: Container(
-        height: 25,
-        alignment: Alignment.center,
-        child: tabIcon,
+        margin: const EdgeInsets.symmetric(horizontal: 3.0),
+        child: TextButton(
+        style: ButtonStyle(
+          side: MaterialStateProperty.all(BorderSide(width: 1, color: Colors.black)),
+        ),
+
+          onPressed: () {
+            setState(() {
+              _currentPage = index;
+              _pageController.animateToPage(index, duration: Duration(milliseconds: 300), curve: Curves.ease);
+            });
+          },
+          child: Container(
+            height: 25,
+            alignment: Alignment.center,
+            child: Image(
+              image: AssetImage(asset),
+            ),
+          ),
+        ),
       ),
     );
   }
@@ -790,8 +775,6 @@ class _PokemonDetailsPageState extends State<PokemonDetailsPage> {
 
     );
   }
-
-
 
   // AppBar para la pagina de detalles
   AppBar appBarDefault(){
