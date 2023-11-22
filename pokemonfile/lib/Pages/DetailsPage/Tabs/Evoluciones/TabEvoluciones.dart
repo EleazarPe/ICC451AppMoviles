@@ -26,16 +26,13 @@ class TabEvoluciones extends StatelessWidget {
       Expanded(
         child: ListView(
           shrinkWrap: true,
-          padding: EdgeInsets.all(15.0),
+          scrollDirection: Axis.vertical,
+          padding: const EdgeInsets.all(15.0),
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Row(
-                  children: pokemonDetails.evolutionChain.map((e) {return createEvoluciones(e);}).toList(),
-                )
-              ],
+              children: pokemonDetails.evolutionChain.map((e) {return createEvoluciones(e);}).toList(),
             ),
           ],
         ),
@@ -45,16 +42,13 @@ class TabEvoluciones extends StatelessWidget {
 
   Widget createEvoluciones(Evolution evolution){
 
+
     return Row(
-
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-
-        Container(
-          margin: EdgeInsets.all(10.0),
-          alignment: Alignment.center,
-          child: Text(evolution.name),
-        ),
-
+        evolutionContainer(evolution),
+        evolution.evolvesTo.isEmpty ? Container() : const Icon(Icons.arrow_forward),
         Column(
           children: evolution.evolvesTo.map((e) {
             return createEvoluciones(e);
@@ -63,5 +57,16 @@ class TabEvoluciones extends StatelessWidget {
       ],
     );
   }
+
+  Widget evolutionContainer(Evolution evolution){
+
+    return Container(
+        margin: EdgeInsets.all(10.0),
+        alignment: Alignment.center,
+        child: Text(evolution.name),
+    );
+  }
+
+
 
 }
