@@ -1,14 +1,10 @@
-// To parse this JSON data, do
-//
-//     final pokeList = pokeListFromJson(jsonString);
-
 import 'dart:convert';
 
-PokeOnly pokeListFromJson(String str) => PokeOnly.fromJson(json.decode(str));
+PokemonOnly pokeListFromJson(String str) => PokemonOnly.fromJson(json.decode(str));
 
-String pokeListToJson(PokeOnly data) => json.encode(data.toJson());
+String pokeListToJson(PokemonOnly data) => json.encode(data.toJson());
 
-class PokeOnly {
+class PokemonOnly {
   List<Ability> abilities;
   int baseExperience;
   List<Species> forms;
@@ -29,7 +25,7 @@ class PokeOnly {
   List<Type> types;
   int weight;
 
-  PokeOnly({
+  PokemonOnly({
     required this.abilities,
     required this.baseExperience,
     required this.forms,
@@ -51,7 +47,7 @@ class PokeOnly {
     required this.weight,
   });
 
-  factory PokeOnly.fromJson(Map<String, dynamic> json) => PokeOnly(
+  factory PokemonOnly.fromJson(Map<String, dynamic> json) => PokemonOnly(
     abilities: List<Ability>.from(json["abilities"].map((x) => Ability.fromJson(x))),
     baseExperience: json["base_experience"],
     forms: List<Species>.from(json["forms"].map((x) => Species.fromJson(x))),

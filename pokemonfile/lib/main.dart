@@ -1,12 +1,5 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'package:cached_network_image/cached_network_image.dart';
-import 'DTO/PokeList.dart';
-import 'Database/Database.dart';
-import 'DTO/PokeOnly.dart';
-import 'Widgets/PokemonCard.dart' as pc;
-import 'Page/PokemonListPage.dart';
+import 'Pages/ListPage/ListPage.dart';
 
 
 void main() {

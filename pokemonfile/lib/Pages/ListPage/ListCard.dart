@@ -2,11 +2,11 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:cached_network_image/cached_network_image.dart';
-import '../DTO/PokeList.dart';
-import '../Database/Database.dart';
-import '../DTO/PokeOnly.dart';
+import '../../DTO/DTO.PokeList.dart';
+import '../../Database/Database.dart';
+import '../../DTO/DTO.PokemonOnly.dart';
 
-import '../Model/Pokemon.dart';
+import '../../Model/Pokemon.dart';
 
 class PokemonCard extends StatefulWidget {
   final Result pokemon;
@@ -258,7 +258,7 @@ class _PokemonCardState extends State<PokemonCard> {
 
       final pokemonData = json.decode(pokemonResponse.body);
 
-      PokeOnly pokeOnly = PokeOnly.fromJson(pokemonData);
+      PokemonOnly pokeOnly = PokemonOnly.fromJson(pokemonData);
 
       if (pokeOnly.types != null)
 
@@ -271,7 +271,9 @@ class _PokemonCardState extends State<PokemonCard> {
       }
 
       await db.updatePokemon(pokemonDb);
-      updatePokemonInfo();
+      if (mounted){
+        setState(() {});
+      }
 
     } else {
       throw Exception('Failed to load pokemon info');

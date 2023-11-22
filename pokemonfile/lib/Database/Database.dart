@@ -1,10 +1,8 @@
 import 'dart:async';
 import 'dart:ffi';
-import 'dart:ui';
 
-import 'package:flutter/widgets.dart';
 import 'package:path/path.dart';
-import 'package:pokemonfile/DTO/PokeList.dart';
+import 'package:pokemonfile/DTO/DTO.PokeList.dart';
 import 'package:sqflite/sqflite.dart';
 
 import '../Model/Pokemon.dart';
