@@ -1,10 +1,10 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:pokemonfile/Pages/DetailsPage/Tabs/Estadisticas/TabEstadisticas.dart';
-import 'package:pokemonfile/Pages/DetailsPage/Tabs/Evoluciones/TabEvoluciones.dart';
-import 'package:pokemonfile/Pages/DetailsPage/Tabs/Informacion/TabInformacion.dart';
-import 'package:pokemonfile/Pages/DetailsPage/Tabs/Movimientos/TabMovimientos.dart';
+import 'package:pokemonfile/Pages/DetailsPage/Tabs/Estadisticas/Details.Tab.Estadisticas.dart';
+import 'package:pokemonfile/Pages/DetailsPage/Tabs/Evoluciones/Details.Tab.Evoluciones.dart';
+import 'package:pokemonfile/Pages/DetailsPage/Tabs/Informacion/Details.Tab.Informacion.dart';
+import 'package:pokemonfile/Pages/DetailsPage/Tabs/Movimientos/Details.Tab.Movimientos.dart';
 import '../../DTO/DTO.EvolutionChain.dart' as EC;
 import '../../DTO/DTO.PokemonOnly.dart' as PO;
 import '../../DTO/DTO.PokemonSpecies.dart' as PS;
@@ -46,7 +46,7 @@ class _PokemonDetailsPageState extends State<PokemonDetailsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appBarDefault(),
+      appBar: DetailsAppBar(),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -107,32 +107,34 @@ class _PokemonDetailsPageState extends State<PokemonDetailsPage> {
     );
   }
 
+
+  // TabIcon
   Widget _buildNavigationItem(int index, String title) {
     String asset = "placeholder";
     switch (index) {
       case 0:
-        {
-          asset = 'assets/icons/Info.png';
-        }
-        break;
+      {
+        asset = 'assets/icons/Info.png';
+      }
+      break;
 
       case 1:
-        {
-          asset = 'assets/icons/stats.png';
-        }
-        break;
+      {
+        asset = 'assets/icons/stats.png';
+      }
+      break;
 
       case 2:
-        {
-          asset = 'assets/icons/evolution.png';
-        }
-        break;
+      {
+        asset = 'assets/icons/evolution.png';
+      }
+      break;
 
       case 3:
-        {
-          asset = 'assets/icons/tm.png';
-        }
-        break;
+      {
+        asset = 'assets/icons/tm.png';
+      }
+      break;
     }
 
     return Expanded(
@@ -191,7 +193,7 @@ class _PokemonDetailsPageState extends State<PokemonDetailsPage> {
   }
 
   // AppBar para la pagina de detalles
-  AppBar appBarDefault() {
+  AppBar DetailsAppBar() {
     return AppBar(
         title: Text(pokemonDB.name),
         //backgroundColor: Color.fromARGB(255, 202, 0, 16),

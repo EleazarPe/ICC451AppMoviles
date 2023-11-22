@@ -61,9 +61,31 @@ class TabEvoluciones extends StatelessWidget {
   Widget evolutionContainer(Evolution evolution){
 
     return Container(
-        margin: EdgeInsets.all(10.0),
-        alignment: Alignment.center,
-        child: Text(evolution.name),
+      margin: EdgeInsets.all(10.0),
+      height: 70,
+      alignment: Alignment.center,
+      child: Column(
+        children: [
+          Expanded(
+            child: GestureDetector(
+              onTap: () {
+                print(evolution.name);
+              },
+              child: Container(
+                alignment: Alignment.center,
+                padding: const EdgeInsets.all(5.0),
+                child: Image.network(
+                  'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/${evolution.id}.png',
+                ),
+              ),
+            ),
+          ),
+          Container(
+            alignment: Alignment.bottomCenter,
+            child: Text(evolution.name),
+          ),
+        ],
+      ),
     );
   }
 

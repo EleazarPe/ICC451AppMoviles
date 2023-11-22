@@ -7,7 +7,7 @@ import '../../Database/Database.dart';
 import '../../DTO/DTO.PokemonOnly.dart';
 import '../../Model/Pokemon.dart';
 import 'ListCard.dart' as pc;
-import '../DetailsPage/DetailsPage.dart';
+import '../DetailsPage/Details.Page.dart';
 
 
 class PokemonListPage extends StatefulWidget {
