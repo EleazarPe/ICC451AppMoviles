@@ -108,7 +108,7 @@ class _PokemonDetailsPageState extends State<PokemonDetailsPage> {
   }
 
 
-  // TabIcon
+  // TabIcons
   Widget _buildNavigationItem(int index, String title) {
     String asset = "placeholder";
     switch (index) {

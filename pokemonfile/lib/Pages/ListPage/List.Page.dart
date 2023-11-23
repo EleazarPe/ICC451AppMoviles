@@ -8,6 +8,7 @@ import '../../DTO/DTO.PokemonOnly.dart';
 import '../../Model/Pokemon.dart';
 import 'ListCard.dart' as pc;
 import '../DetailsPage/Details.Page.dart';
+import 'package:graphql/client.dart';
 
 
 class PokemonListPage extends StatefulWidget {
@@ -142,41 +143,6 @@ class _PokemonListPageState extends State<PokemonListPage> {
     }
   }
 
-/*  Future<String> fetchPokemonData(String pokemonUrl) async {
-    try {
-      http.Response pokemonResponse = await http.get(Uri.parse(pokemonUrl));
-      if (pokemonResponse.statusCode == 200) {
-        return pokemonResponse.body;
-      } else {
-        throw Exception('Failed to load Pokemon info');
-      }
-    } catch (error) {
-      print('Error: $error');
-      return '';
-    }
-  }*/
-
-/*  Future<void> fetchAndSetPokemonData(Result pokemon) async {
-    try {
-      String pokemonData = await fetchPokemonData(pokemon.url);
-      pokemon.pokemon = PokeOnly.fromJson(json.decode(pokemonData));
-    } catch (error) {
-      print('Error fetching Pokémon data: $error');
-      // Manejo de errores
-    }
-  }*/
-/*  Future<void> fetchAllPokemonData(List<Result> displayedPokemons) async {
-    final futures = <Future>[];
-
-    for (var pokemon in displayedPokemons) {
-      if (pokemon.pokemon == null) {
-        futures.add(fetchAndSetPokemonData(pokemon));
-      }
-    }
-
-    await Future.wait(futures);
-  }*/
-
   @override
   Widget build(BuildContext context) {
 
@@ -200,10 +166,6 @@ class _PokemonListPageState extends State<PokemonListPage> {
 
             }).toList()
     );
-    if(searchString.isNotEmpty){
-      //fetchAllPokemonData(displayedPokemons);
-    }
-    //fetchAllPokemonData(displayedPokemons);
 
     return
     Scaffold(
@@ -314,7 +276,6 @@ class _PokemonListPageState extends State<PokemonListPage> {
       pokemonsDb = list;
     });
   }
-
 
 }
 
