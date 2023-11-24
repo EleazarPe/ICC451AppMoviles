@@ -14,7 +14,7 @@ class PokedexApp extends StatelessWidget {
       theme: ThemeData(
         primaryColor: Colors.red, // Cambia el color de la AppBar a rojo
       ),
-      home: newListPage(),
+      home: ListPage(),
     );
   }
 }

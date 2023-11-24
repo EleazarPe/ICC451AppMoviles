@@ -2,8 +2,9 @@ import 'dart:async';
 import 'dart:ffi';
 
 import 'package:path/path.dart';
-import 'package:pokemonfile/DTO/DTO.PokemonGraphQL.dart' as PQ;
+import 'package:pokemonfile/DTO/DTO.PokeList.dart';
 import 'package:sqflite/sqflite.dart';
+
 import '../Model/Pokemon.dart';
 
 class DatabaseHelper {
@@ -16,7 +17,7 @@ class DatabaseHelper {
     join(await getDatabasesPath(), "pokedex_database.db"),
 
     onCreate: (db, version) async => _createdb(db),
-      version: 2,
+      version: 1,
     );
 
     return database;
@@ -32,13 +33,6 @@ class DatabaseHelper {
           'name STRING, '
           'type1 STRING, '
           'type2 STRING'
-          ')',
-    );
-
-    await db.execute(
-      'CREATE TABLE hash('
-          'id INTEGER PRIMARY KEY, '
-          'hash INTEGER '
           ')',
     );
 
@@ -149,60 +143,47 @@ class DatabaseHelper {
 
   // Cambiar el estado de favorito de un pokemon
   Future<void> changeFavorite(int id) async {
-    print("Changing Favorite pokemon: $id");
+
     List<Pokemon> pokemon = await pokemonId(id);
     if(pokemon.isEmpty){
-      print("No Pokemon Found");
+      return;
     }
     if (pokemon[0].favorite == 1){
       pokemon[0].favorite = 0;
       await updatePokemon(pokemon[0]);
-      print("Success, pokemon unfavorited");
-    }else {
+    }else{
       pokemon[0].favorite = 1;
       await updatePokemon(pokemon[0]);
-      print("Success, pokemon favorited");
     }
-
   }
 
-  Future<List<Pokemon>> updateDatabase(PQ.PokemonGraphQL pokemonGraphQL) async {
+  Future<void> insertAllPokemons(PokeList tempPokemons) async {
 
-    // Ini database
     final db = await _database;
 
-    // Check if there is changed information
-    List<Pokemon> dbPokemons = await pokemonList();
-    if (dbPokemons.length == pokemonGraphQL.pokemonList.length){
-      return dbPokemons;
+    List<Pokemon> pokemons = await pokemonList();
+
+    if (pokemons.length == tempPokemons.count){
+      return;
     }
 
-    List<Pokemon> pokemons = [];
-
-    pokemonGraphQL.pokemonList.forEach((p) {
-      String type1 = p.pokemonV2PokemonTypes[0].pokemonV2Type.name;
-      String type2 = p.pokemonV2PokemonTypes.length > 1 ? p.pokemonV2PokemonTypes[1].pokemonV2Type.name : "";
-      Pokemon poke = Pokemon(
-        id: p.id,
-        favorite: 0,
-        name: p.name,
-        type1: type1,
-        type2: type2,
-      );
-      pokemons.add(poke);
-    });
-
     var batch = db.batch();
-    pokemons.forEach((p) {
+    tempPokemons.results.forEach((element) async {
+
       batch.insert(
           'pokemons',
-          p.toMap(),
+          Pokemon(
+            id: int.parse(element.url.split('/')[6]),
+            favorite: 0,
+            name: element.name,
+            type1: "",
+            type2: "",
+          ).toMap(),
           conflictAlgorithm: ConflictAlgorithm.replace
       );
+      //await insertPokemon(Pokemon(id: int.parse(element.url.split('/')[6]), favorite: 0));
     });
     batch.commit();
-
-    return pokemons;
 
   }
 }

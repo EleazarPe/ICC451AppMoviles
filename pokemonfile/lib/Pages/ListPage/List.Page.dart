@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:cached_network_image/cached_network_image.dart';
 import '../../DTO/DTO.PokeList.dart';
-import '../../Database/Database.dart';
+import '../../Database/OldDatabase.dart';
 import '../../DTO/DTO.PokemonOnly.dart';
 import '../../Model/Pokemon.dart';
 import 'ListCard.dart' as pc;
@@ -225,10 +225,10 @@ class _PokemonListPageState extends State<PokemonListPage> {
                     },
 
                     // Pokemon Card
-                    child: pc.PokemonCard(
+                    child: Container()/*pc.PokemonCard(
                       pokemon: displayedPokemons[index],
                       pokemonDB: getPokemonId(pokemonsDb, int.parse(displayedPokemons[index].url.split('/')[6])),
-                    ),
+                    ),*/
                   ),
                 );
               },

@@ -9,31 +9,27 @@ import '../../DTO/DTO.PokemonOnly.dart';
 import '../../Model/Pokemon.dart';
 
 class PokemonCard extends StatefulWidget {
-  final Result pokemon;
-  final Pokemon pokemonDB;
+  final Pokemon pokemon;
   final DatabaseHelper db = DatabaseHelper();
 
-  PokemonCard({Key? key, required this.pokemon, required this.pokemonDB}) : super(key: key);
+  PokemonCard({Key? key, required this.pokemon}) : super(key: key);
 
   @override
   State<PokemonCard> createState() =>
       _PokemonCardState(
         db: db,
         pokemon: pokemon,
-        pokemonDb: pokemonDB,
       );
 }
 
 class _PokemonCardState extends State<PokemonCard> {
 
   final DatabaseHelper db;
-  late Result pokemon;
-  late Pokemon pokemonDb;
+  late Pokemon pokemon;
 
   _PokemonCardState({
     required this.db,
     required this.pokemon,
-    required this.pokemonDb
   });
 
   @override
@@ -44,9 +40,8 @@ class _PokemonCardState extends State<PokemonCard> {
   @override
   void didUpdateWidget(covariant PokemonCard oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (oldWidget.pokemon != widget.pokemon || oldWidget.pokemonDB != widget.pokemonDB) {
+    if (oldWidget.pokemon != widget.pokemon) {
       pokemon = widget.pokemon;
-      pokemonDb = widget.pokemonDB;
     }
   }
 
@@ -69,7 +64,7 @@ class _PokemonCardState extends State<PokemonCard> {
                       alignment: Alignment.topLeft,
                       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
                       child: Text(
-                        '${pokemonDb.id}',
+                        '${pokemon.id}',
                         style: const TextStyle(
                           color: Colors.blueGrey,
                           fontWeight: FontWeight.bold,
@@ -87,7 +82,7 @@ class _PokemonCardState extends State<PokemonCard> {
                     ),
                     Center(
                       child: CachedNetworkImage(
-                        imageUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/${pokemonDb.id}.png',
+                        imageUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/${pokemon.id}.png',
                         placeholder: (context, url) => const Center(child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Colors.red))),
                         errorWidget: (context, url, error) => const Icon(Icons.error),
                         fit: BoxFit.cover,
@@ -96,7 +91,7 @@ class _PokemonCardState extends State<PokemonCard> {
                     Container(
                       alignment: Alignment.topRight,
                       child: IconButton(
-                        icon: pokemonDb.favoriteBool()
+                        icon: pokemon.favoriteBool()
                             ? const Icon(Icons.favorite_outlined, color: Colors.red)
                             : const Icon(Icons.favorite_border_outlined),
                         onPressed: () async {
@@ -118,7 +113,7 @@ class _PokemonCardState extends State<PokemonCard> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        pokemonDb.name,
+                        pokemon.name,
                         style: const TextStyle(
                           fontWeight: FontWeight.bold,
                         ),
@@ -141,32 +136,8 @@ class _PokemonCardState extends State<PokemonCard> {
   }
 
   Future<void> toggleFavorite() async {
-    await db.changeFavorite(pokemonDb.id);
+    await db.changeFavorite(pokemon.id);
     updatePokemonInfo();
-  }
-
-  // The old way of creating the boxes for pokemon types
-  List<Widget> boxPokemonTypeTemp(){
-
-    return pokemon.pokemon?.types.map((element) {
-      Color color = getColorForElement(element.type.name);
-      Color textColor = textColorForBackground(color);
-      return Expanded(
-        child: Container(
-          margin: const EdgeInsets.only(left: 3.0, right: 3.0, top: 5.0),
-          padding: const EdgeInsets.only(top: 6.0, bottom: 6.0),
-          decoration: BoxDecoration(
-            color: color,
-            borderRadius: BorderRadius.circular(8.0),
-          ),
-          child: Text(
-            element.type.name,
-            style: TextStyle(color: textColor),
-            textAlign: TextAlign.center,
-          ),
-        ),
-      );
-    }).toList() ?? [];
   }
 
   // Create the boxes for pokemon types
@@ -175,7 +146,7 @@ class _PokemonCardState extends State<PokemonCard> {
     List<Widget> ret = [];
 
     // If types arent loaded
-    if(pokemonDb.type1 == ""){
+    if(pokemon.type1 == ""){
       ret.add(
         Container(
           child: Expanded(
@@ -198,13 +169,12 @@ class _PokemonCardState extends State<PokemonCard> {
           ),
           ));
 
-      loadPokemonTypes();
       return ret;
     }
 
     // If types are loaded
     else{
-      Color color = getColorForElement(pokemonDb.type1);
+      Color color = getColorForElement(pokemon.type1);
       Color textColor = textColorForBackground(color);
       ret.add(Expanded(
         child: Container(
@@ -215,7 +185,7 @@ class _PokemonCardState extends State<PokemonCard> {
             borderRadius: BorderRadius.circular(8.0),
           ),
           child: Text(
-            pokemonDb.type1,
+            pokemon.type1,
             style: TextStyle(color: textColor),
             textAlign: TextAlign.center,
           ),
@@ -224,8 +194,8 @@ class _PokemonCardState extends State<PokemonCard> {
     }
 
     // If there exists a type2
-    if (pokemonDb.type2 != ""){
-      Color color = getColorForElement(pokemonDb.type2);
+    if (pokemon.type2 != ""){
+      Color color = getColorForElement(pokemon.type2);
       Color textColor = textColorForBackground(color);
       ret.add(Expanded(
         child: Container(
@@ -236,7 +206,7 @@ class _PokemonCardState extends State<PokemonCard> {
             borderRadius: BorderRadius.circular(8.0),
           ),
           child: Text(
-            pokemonDb.type2,
+            pokemon.type2,
             style: TextStyle(color: textColor),
             textAlign: TextAlign.center,
           ),
@@ -247,45 +217,11 @@ class _PokemonCardState extends State<PokemonCard> {
     return ret;
   }
 
-  // Cargar los tipos de pokemon
-  Future<void> loadPokemonTypes() async {
-
-    String url = "https://pokeapi.co/api/v2/pokemon/${pokemonDb.id}/";
-
-    http.Response pokemonResponse = await http.get(Uri.parse(url));
-
-    if (pokemonResponse.statusCode == 200) {
-
-      final pokemonData = json.decode(pokemonResponse.body);
-
-      PokemonOnly pokeOnly = PokemonOnly.fromJson(pokemonData);
-
-      if (pokeOnly.types != null)
-
-      if (pokeOnly.types.length == 2){
-        pokemonDb.type1 = pokeOnly.types[0].type.name;
-        pokemonDb.type2 = pokeOnly.types[1].type.name;
-      }else{
-        pokemonDb.type1 = pokeOnly.types[0].type.name;
-        pokemonDb.type2 = "";
-      }
-
-      await db.updatePokemon(pokemonDb);
-      if (mounted){
-        setState(() {});
-      }
-
-    } else {
-      throw Exception('Failed to load pokemon info');
-    }
-
-  }
-
   // Obtener una nueva informacion del pokemon y hacer un set state
   Future<void> updatePokemonInfo() async {
-    List<Pokemon> pokemonSingle = await db.pokemonId(pokemonDb.id);
+    List<Pokemon> pokemonSingle = await db.pokemonId(pokemon.id);
     setState(() {
-      pokemonDb = pokemonSingle[0];
+      pokemon = pokemonSingle[0];
     });
   }
 
