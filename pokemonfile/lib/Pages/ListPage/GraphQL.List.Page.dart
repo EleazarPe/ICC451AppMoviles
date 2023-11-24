@@ -19,7 +19,7 @@ class _newListPageState extends State<ListPage> {
   DatabaseHelper db = DatabaseHelper();
 
   List<Pokemon> pokemons = []; // All Pokemons loaded in memory.
-  List<Pokemon> displayedPokemons = []; // Pokemons that will be shown in the list.
+  //List<Pokemon> displayedPokemons = []; // Pokemons that will be shown in the list.
   bool loading = true; // If the Page is loading information.
   int favoriteFilter = 0; // 0 all, 1 only favorite, -1 only not favorite Pokemons.
 
@@ -48,7 +48,7 @@ class _newListPageState extends State<ListPage> {
   Widget build(BuildContext context) {
 
     // Filtering the list
-    displayedPokemons = pokemons.where((p) {
+    List<Pokemon> displayedPokemons = pokemons.where((p) {
 
       // checking favorite Filter
       bool favorite = true;
@@ -183,7 +183,6 @@ query samplePokeAPIquery {
     PokemonGraphQL pokemonGraphQL = PokemonGraphQL.fromJson(result.data!);
 
     pokemons = await db.updateDatabase(pokemonGraphQL);
-    displayedPokemons = pokemons;
     setState(() {
       loading = false;
     });
@@ -206,7 +205,7 @@ query samplePokeAPIquery {
                 }
 
               }
-              setState(() {});
+              await getPokemonDB();
             },
             icon: favoriteFilter == 1 ?
             const Icon(Icons.favorite_outlined, color: Colors.red,) :
@@ -222,6 +221,12 @@ query samplePokeAPIquery {
       context,
       MaterialPageRoute(builder: (context) => PokemonDetailsPage(pokemonDB: pokemon)),
     );
+  }
+  Future<void> getPokemonDB() async {
+    List<Pokemon> list = await db.pokemonList();
+    setState(() {
+      pokemons = list;
+    });
   }
 
 
