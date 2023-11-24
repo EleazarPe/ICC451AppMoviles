@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:pokemonfile/DTO/DTO.PokemonGraphQL.dart';
 import 'package:pokemonfile/Pages/ListPage/List.Page.dart';
 import '../../DTO/DTO.PokeList.dart';
 import '../../Database/Database.dart';
@@ -12,46 +13,76 @@ import '../DetailsPage/Details.Page.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 
 
-class GraphQLListPage extends StatefulWidget {
-  const GraphQLListPage({super.key});
+class newListPage extends StatefulWidget {
+  const newListPage({super.key});
 
   @override
-  State<GraphQLListPage> createState() => _GraphQLListPage();
+  State<newListPage> createState() => _newListPageState();
 }
 
-class _GraphQLListPage extends State<GraphQLListPage> {
+class _newListPageState extends State<newListPage> {
+
+  List<Pokemon> pokemons = []; // All Pokemons loaded in memory.
+  List<Pokemon> displayedPokemos = []; // Pokemons that will be shown in the list.
+  bool loading = true; // If the Page is loading information.
+  int favoriteFilter = 0; // 0 all, 1 only favorite, -1 only not favorite Pokemons.
 
   final GraphQLClient client = GraphQLClient(
-    link: HttpLink('https://beta.pokeapi.co/graphql/v1beta'),
-    cache: GraphQLCache(),
-  );
-
-  late final ValueNotifier<GraphQLClient> clientNotifier = ValueNotifier<GraphQLClient>(client);
-
+        link: HttpLink('https://beta.pokeapi.co/graphql/v1beta'),
+        cache: GraphQLCache(),
+      );
 
   @override
-  Widget build(BuildContext context) {
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    loadPokemon();
 
-
-
-    return GraphQLProvider(
-      client: clientNotifier,
-      child: ListPage(),
-    );
   }
-}
 
-class ListPage extends StatefulWidget {
-  const ListPage({super.key});
-
-  @override
-  State<ListPage> createState() => _ListPageState();
-}
-
-class _ListPageState extends State<ListPage> {
   @override
   Widget build(BuildContext context) {
+
     return const Placeholder();
   }
+
+
+  Future<void> loadPokemon() async {
+    const String queryPokemons = r'''
+query samplePokeAPIquery {
+  pokemon_v2_pokemon(limit: 1){
+    id
+    name
+    pokemon_v2_pokemontypes {
+      pokemon_v2_type {
+        id
+        name
+      }
+    }
+  }
+}
+''';
+
+    QueryOptions options = QueryOptions(document: gql(queryPokemons));
+
+    QueryResult result = await client.query(options);
+
+    if(result.hasException){
+      print("Could Not Fetch List Pokemon Data from API");
+    }else{
+      if (result == null){
+        print("Could Not Fetch List Pokemon Data from API");
+        return;
+      }
+      if (result.data != null){
+        Map<String, dynamic> data = result.data!;
+        PokemonGraphQL pokemonGraphQL = PokemonGraphQL.fromJson(data);
+        print(pokemonGraphQL);
+      }
+    }
+
+  }
+
+
 }
 

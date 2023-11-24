@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pokemonfile/Pages/ListPage/GraphQL.List.Page.dart';
 import 'Pages/ListPage/List.Page.dart';
 
 
@@ -13,7 +14,7 @@ class PokedexApp extends StatelessWidget {
       theme: ThemeData(
         primaryColor: Colors.red, // Cambia el color de la AppBar a rojo
       ),
-      home: PokemonListPage(),
+      home: newListPage(),
     );
   }
 }
