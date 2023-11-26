@@ -148,20 +148,23 @@ class DatabaseHelper {
   }
 
   // Cambiar el estado de favorito de un pokemon
-  Future<void> changeFavorite(int id) async {
+  Future<List<Pokemon>> changeFavorite(int id) async {
     print("Changing Favorite pokemon: $id");
     List<Pokemon> pokemon = await pokemonId(id);
     if(pokemon.isEmpty){
       print("No Pokemon Found");
+      return pokemon;
     }
     if (pokemon[0].favorite == 1){
       pokemon[0].favorite = 0;
       await updatePokemon(pokemon[0]);
       print("Success, pokemon unfavorited");
+      return pokemon;
     }else {
       pokemon[0].favorite = 1;
       await updatePokemon(pokemon[0]);
       print("Success, pokemon favorited");
+      return pokemon;
     }
 
   }

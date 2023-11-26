@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:pokemonfile/DTO/DTO.PokemonGraphQL.dart';
 import '../../Database/Database.dart';
 import '../../Model/Pokemon.dart';
-import 'ListCard.dart' as pc;
+import 'List.Card.dart' as pc;
 import '../DetailsPage/Details.Page.dart';
 import 'package:graphql/client.dart';
 
@@ -16,6 +16,8 @@ class ListPage extends StatefulWidget {
 
 class _newListPageState extends State<ListPage> {
 
+
+
   DatabaseHelper db = DatabaseHelper();
 
   List<Pokemon> pokemons = []; // All Pokemons loaded in memory.
@@ -25,6 +27,7 @@ class _newListPageState extends State<ListPage> {
 
   ScrollController _scrollController = ScrollController();
   String searchString = '';
+  int id = 0;
 
   final GraphQLClient client = GraphQLClient(
         link: HttpLink('https://beta.pokeapi.co/graphql/v1beta'),
@@ -138,6 +141,7 @@ class _newListPageState extends State<ListPage> {
 
                     // Pokemon Card
                     child: pc.PokemonCard(
+                      onSonChanged: updatePokemonFromChild,
                       pokemon: getPokemonId(pokemons, displayedPokemons[index].id),
                     ),
                   ),
@@ -219,7 +223,7 @@ query samplePokeAPIquery {
     setState(() {});
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => PokemonDetailsPage(pokemonDB: pokemon)),
+      MaterialPageRoute(builder: (context) => PokemonDetailsPage(pokemonDB: pokemon, onSonChanged: updatePokemonFromChild,)),
     );
   }
   Future<void> getPokemonDB() async {
@@ -227,6 +231,17 @@ query samplePokeAPIquery {
     setState(() {
       pokemons = list;
     });
+  }
+
+  void updatePokemonFromChild(Pokemon pokemonChild) {
+    for(int i = 0 ; i < pokemons.length ; i ++){
+      if (pokemons[i].id == pokemonChild.id){
+        setState(() {
+          pokemons[i] = pokemonChild;
+        });
+        return;
+      }
+    }
   }
 
 

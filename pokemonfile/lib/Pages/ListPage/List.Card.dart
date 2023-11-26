@@ -8,15 +8,21 @@ import '../../DTO/DTO.PokemonOnly.dart';
 
 import '../../Model/Pokemon.dart';
 
+typedef PokemonCallBack = void Function(Pokemon pokemon);
+
 class PokemonCard extends StatefulWidget {
+
+  final PokemonCallBack onSonChanged;
+
   final Pokemon pokemon;
   final DatabaseHelper db = DatabaseHelper();
 
-  PokemonCard({Key? key, required this.pokemon}) : super(key: key);
+  PokemonCard({Key? key, required this.pokemon, required this.onSonChanged}) : super(key: key);
 
   @override
   State<PokemonCard> createState() =>
       _PokemonCardState(
+        onSonChanged: onSonChanged,
         db: db,
         pokemon: pokemon,
       );
@@ -24,10 +30,13 @@ class PokemonCard extends StatefulWidget {
 
 class _PokemonCardState extends State<PokemonCard> {
 
+  final PokemonCallBack onSonChanged;
+
   final DatabaseHelper db;
   late Pokemon pokemon;
 
   _PokemonCardState({
+    required this.onSonChanged,
     required this.db,
     required this.pokemon,
   });
@@ -136,8 +145,11 @@ class _PokemonCardState extends State<PokemonCard> {
   }
 
   Future<void> toggleFavorite() async {
-    await db.changeFavorite(pokemon.id);
-    updatePokemonInfo();
+    List<Pokemon> poke = await db.changeFavorite(pokemon.id);
+    setState(() {
+      pokemon = poke[0];
+      onSonChanged(pokemon);
+    });
   }
 
   // Create the boxes for pokemon types
@@ -217,13 +229,13 @@ class _PokemonCardState extends State<PokemonCard> {
     return ret;
   }
 
-  // Obtener una nueva informacion del pokemon y hacer un set state
+/*  // Obtener una nueva informacion del pokemon y hacer un set state
   Future<void> updatePokemonInfo() async {
     List<Pokemon> pokemonSingle = await db.pokemonId(pokemon.id);
     setState(() {
       pokemon = pokemonSingle[0];
     });
-  }
+  }*/
 
 
 

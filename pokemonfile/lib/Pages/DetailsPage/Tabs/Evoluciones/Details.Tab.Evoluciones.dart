@@ -42,7 +42,6 @@ class TabEvoluciones extends StatelessWidget {
 
   Widget createEvoluciones(Evolution evolution){
 
-
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,

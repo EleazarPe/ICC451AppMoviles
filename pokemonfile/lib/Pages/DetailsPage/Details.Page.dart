@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:pokemonfile/Pages/DetailsPage/Tabs/Estadisticas/Details.Tab.Estadisticas.dart';
@@ -12,19 +13,34 @@ import '../../Database/Database.dart';
 import '../../Model/Pokemon.dart';
 import '../../Model/PokemonDetails.dart';
 
+typedef PokemonCallBack = void Function(Pokemon pokemon);
+
 class PokemonDetailsPage extends StatefulWidget {
+
+  final PokemonCallBack onSonChanged;
   final Pokemon pokemonDB;
 
-  PokemonDetailsPage({required this.pokemonDB});
+  PokemonDetailsPage({
+    required this.pokemonDB,
+    required this.onSonChanged,
+  });
 
   @override
   _PokemonDetailsPageState createState() =>
-      _PokemonDetailsPageState(pokemonDB: pokemonDB);
+      _PokemonDetailsPageState(
+        pokemonDB: pokemonDB,
+        onSonChanged: onSonChanged,
+      );
 }
 
 class _PokemonDetailsPageState extends State<PokemonDetailsPage> {
-  _PokemonDetailsPageState({required this.pokemonDB});
+  _PokemonDetailsPageState({
+    required this.pokemonDB,
+    required this.onSonChanged,
+  });
 
+
+  final PokemonCallBack onSonChanged;
   DatabaseHelper db = DatabaseHelper();
   late Pokemon pokemonDB;
   late PokemonDetails pokemonDetails;
@@ -39,7 +55,6 @@ class _PokemonDetailsPageState extends State<PokemonDetailsPage> {
   void initState() {
     super.initState();
     loadPokemonDetails();
-    updatePokemonDB();
     _pageController = PageController(initialPage: _currentPage);
   }
 
@@ -68,8 +83,11 @@ class _PokemonDetailsPageState extends State<PokemonDetailsPage> {
                   Container(
                     alignment: Alignment.center,
                     padding: const EdgeInsets.all(5.0),
-                    child: Image.network(
-                      'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/${pokemonDB.id}.png',
+                    child: CachedNetworkImage(
+                      imageUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/${pokemonDB.id}.png',
+                      placeholder: (context, url) => const Center(child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Colors.red))),
+                      errorWidget: (context, url, error) => const Icon(Icons.error),
+                      fit: BoxFit.cover,
                     ),
                   ),
                 ],
@@ -219,8 +237,11 @@ class _PokemonDetailsPageState extends State<PokemonDetailsPage> {
                   )
                 : const Icon(Icons.favorite_border_outlined),
             onPressed: () async {
-              await db.changeFavorite(pokemonDB.id);
-              updatePokemonDB();
+              List<Pokemon> poke = await db.changeFavorite(pokemonDB.id);
+              setState(() {
+                pokemonDB = poke[0];
+                onSonChanged(pokemonDB);
+              });
             },
           ),
         ]);
