@@ -11,10 +11,10 @@ class ListPage extends StatefulWidget {
   const ListPage({super.key});
 
   @override
-  State<ListPage> createState() => _newListPageState();
+  State<ListPage> createState() => _ListPageState();
 }
 
-class _newListPageState extends State<ListPage> {
+class _ListPageState extends State<ListPage> {
 
 
 
@@ -133,7 +133,7 @@ class _newListPageState extends State<ListPage> {
               itemBuilder: (context, index) {
 
                 return Padding(
-                  padding: EdgeInsets.all(8),
+                  padding: EdgeInsets.all(4),
                   child: GestureDetector(
                     onTap: () {
                       _openPokemonDetails(context, getPokemonId(pokemons, displayedPokemons[index].id));
@@ -175,6 +175,9 @@ query samplePokeAPIquery {
         id
         name
       }
+    }
+    pokemon_v2_pokemonsprites {
+      sprites
     }
   }
 }

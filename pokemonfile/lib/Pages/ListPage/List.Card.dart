@@ -2,9 +2,9 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:cached_network_image/cached_network_image.dart';
-import '../../DTO/DTO.PokeList.dart';
 import '../../Database/Database.dart';
 import '../../DTO/DTO.PokemonOnly.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 
 import '../../Model/Pokemon.dart';
 
@@ -121,18 +121,23 @@ class _PokemonCardState extends State<PokemonCard> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        pokemon.name,
-                        style: const TextStyle(
-                          fontWeight: FontWeight.bold,
+                      Expanded(
+                        flex: 1,
+                        child: AutoSizeText(
+                          pokemon.name,
+                          minFontSize: 12,
+                          maxFontSize: 20,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(fontWeight: FontWeight.bold),
                         ),
-                      ),
-
-                      // Show the pokemon type
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: boxPokemonType(),
-                      ),
+                        ),
+                      Expanded(
+                        flex: 2,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: boxPokemonType(),
+                          ),
+                      ), // Show the pokemon type
                     ],
                   ),
                 ),

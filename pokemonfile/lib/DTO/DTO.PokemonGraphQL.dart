@@ -25,17 +25,20 @@ class PokemonV2Pokemon {
   int id;
   String name;
   List<PokemonV2PokemonTypes> pokemonV2PokemonTypes;
+  List<PokemonV2PokemonSprites> pokemonV2PokemonSprites;
 
   PokemonV2Pokemon({
     required this.id,
     required this.name,
     required this.pokemonV2PokemonTypes,
+    required this.pokemonV2PokemonSprites,
   });
 
   factory PokemonV2Pokemon.fromJson(Map<String, dynamic> json) =>  PokemonV2Pokemon(
     id: json['id'],
     name: json['name'],
     pokemonV2PokemonTypes: List<PokemonV2PokemonTypes>.from(json["pokemon_v2_pokemontypes"].map((x) => PokemonV2PokemonTypes.fromJson(x))),
+    pokemonV2PokemonSprites: List<PokemonV2PokemonSprites>.from(json["pokemon_v2_pokemonsprites"].map((x) => PokemonV2PokemonSprites.fromJson(x))),
   );
 
   Map<String, dynamic> toJson() => {
@@ -43,6 +46,33 @@ class PokemonV2Pokemon {
     "name": name,
     "pokemon_v2_pokemontypes": List<dynamic>.from(pokemonV2PokemonTypes.map((x) => x.toJson())),
   };
+}
+
+class PokemonV2PokemonSprites {
+
+  Sprites sprites;
+
+  PokemonV2PokemonSprites({
+    required this.sprites
+  });
+
+  factory PokemonV2PokemonSprites.fromJson(Map<String, dynamic> data) =>  PokemonV2PokemonSprites(
+    sprites: Sprites.fromJson(json.decode(data["sprites"])),
+  );
+
+}
+
+class Sprites {
+
+  String? frontDefault;
+
+  Sprites({
+    required this.frontDefault,
+  });
+
+  factory Sprites.fromJson(Map<String, dynamic> json) =>  Sprites(
+    frontDefault: json["front_default"],
+  );
 }
 
 class PokemonV2PokemonTypes {

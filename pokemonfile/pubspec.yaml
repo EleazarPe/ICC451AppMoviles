@@ -41,6 +41,7 @@ dependencies:
   sqflite: ^2.3.0
   path: ^1.8.3
   graphql: ^5.2.0-beta.6
+  auto_size_text: ^3.0.0
 
 dev_dependencies:
   flutter_test:

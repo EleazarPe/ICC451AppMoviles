@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pokemonfile/Pages/ListPage/GraphQL.List.Page.dart';
+import 'package:pokemonfile/Pages/ListPage/List.Page.dart';
 
 
 void main() {
