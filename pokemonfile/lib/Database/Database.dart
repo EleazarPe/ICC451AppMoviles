@@ -73,6 +73,7 @@ class DatabaseHelper {
         name: maps[i]['name'] as String,
         type1: maps[i]['type1'] as String,
         type2: maps[i]['type2'] as String,
+        sprites: [],
       );
     });
 
@@ -98,6 +99,7 @@ class DatabaseHelper {
         name: maps[i]['name'] as String,
         type1: maps[i]['type1'] as String,
         type2: maps[i]['type2'] as String,
+        sprites: []
       );
     });
 
@@ -176,23 +178,33 @@ class DatabaseHelper {
 
     // Check if there is changed information
     List<Pokemon> dbPokemons = await pokemonList();
+
     if (dbPokemons.length == pokemonGraphQL.pokemonList.length){
+      for (var i = 0 ; i < dbPokemons.length ; i ++){
+        dbPokemons[i].sprites = graphQLSpritesToPokemonSprites(pokemonGraphQL.pokemonList[i].pokemonV2PokemonSprites);
+      }
       return dbPokemons;
     }
 
     List<Pokemon> pokemons = [];
 
     pokemonGraphQL.pokemonList.forEach((p) {
+      
       String type1 = p.pokemonV2PokemonTypes[0].pokemonV2Type.name;
       String type2 = p.pokemonV2PokemonTypes.length > 1 ? p.pokemonV2PokemonTypes[1].pokemonV2Type.name : "";
+      List<String> sprites = graphQLSpritesToPokemonSprites(p.pokemonV2PokemonSprites);
       Pokemon poke = Pokemon(
         id: p.id,
         favorite: 0,
         name: p.name,
         type1: type1,
         type2: type2,
+        sprites: sprites,
       );
       pokemons.add(poke);
+      if (poke.id == 1){
+        print(poke.sprites);
+      }
     });
 
     var batch = db.batch();
@@ -206,6 +218,16 @@ class DatabaseHelper {
     batch.commit();
 
     return pokemons;
+  }
 
+  List<String> graphQLSpritesToPokemonSprites(List<PQ.PokemonV2PokemonSprites> pokemonV2PokemonSprites) {
+
+    List<String> sprites = [];
+
+    if (pokemonV2PokemonSprites[0].sprites.frontDefault != null){
+      sprites.add(pokemonV2PokemonSprites[0].sprites.frontDefault!);
+    }
+
+    return sprites;
   }
 }

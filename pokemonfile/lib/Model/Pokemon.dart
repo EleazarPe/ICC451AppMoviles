@@ -6,6 +6,7 @@ class Pokemon {
   String name;
   String type1;
   String type2;
+  List<String> sprites;
 
 
   Pokemon({
@@ -14,6 +15,7 @@ class Pokemon {
     required this.name,
     required this.type1,
     required this.type2,
+    required this.sprites,
   });
 
 
@@ -30,22 +32,6 @@ class Pokemon {
 
   bool favoriteBool(){
     return favorite == 1 ? true : false;
-  }
-
-  Pokemon setPokemonType(List<String> types){
-
-    type1 = "";
-    type2 = "";
-
-    if(types.length == 1) {
-      type1 = types[0];
-    }
-    else if (types.length == 2){
-      type1 = types[0];
-      type2 = types[1];
-    }
-
-    return this;
   }
 
 }

@@ -90,12 +90,14 @@ class _PokemonCardState extends State<PokemonCard> {
                       ),
                     ),
                     Center(
-                      child: CachedNetworkImage(
+                      child: pokemon.sprites.isNotEmpty ?
+                      CachedNetworkImage(
                         imageUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/${pokemon.id}.png',
                         placeholder: (context, url) => const Center(child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Colors.red))),
                         errorWidget: (context, url, error) => const Icon(Icons.error),
                         fit: BoxFit.cover,
-                      ),
+                      ) :
+                      const Icon(Icons.error)
                     ),
                     Container(
                       alignment: Alignment.topRight,
@@ -126,7 +128,7 @@ class _PokemonCardState extends State<PokemonCard> {
                         child: AutoSizeText(
                           pokemon.name,
                           minFontSize: 12,
-                          maxFontSize: 20,
+                          maxFontSize: 24,
                           overflow: TextOverflow.ellipsis,
                           style: const TextStyle(fontWeight: FontWeight.bold),
                         ),
@@ -152,7 +154,7 @@ class _PokemonCardState extends State<PokemonCard> {
   Future<void> toggleFavorite() async {
     List<Pokemon> poke = await db.changeFavorite(pokemon.id);
     setState(() {
-      pokemon = poke[0];
+      pokemon.favorite = poke[0].favorite;
       onSonChanged(pokemon);
     });
   }
