@@ -182,7 +182,11 @@ class DatabaseHelper {
     if (dbPokemons.length == pokemonGraphQL.pokemonList.length){
       for (var i = 0 ; i < dbPokemons.length ; i ++){
         dbPokemons[i].sprites = graphQLSpritesToPokemonSprites(pokemonGraphQL.pokemonList[i].pokemonV2PokemonSprites);
+        if (dbPokemons[i].id == 1){
+          print(dbPokemons[i].sprites);
+        }
       }
+
       return dbPokemons;
     }
 
@@ -203,7 +207,6 @@ class DatabaseHelper {
       );
       pokemons.add(poke);
       if (poke.id == 1){
-        print(poke.sprites);
       }
     });
 
@@ -224,6 +227,17 @@ class DatabaseHelper {
 
     List<String> sprites = [];
 
+    // Home Front
+    if (pokemonV2PokemonSprites[0].sprites.other.home.frontDefault != null){
+      sprites.add(pokemonV2PokemonSprites[0].sprites.other.home.frontDefault!);
+    }
+
+    // Official Artwork front
+    if (pokemonV2PokemonSprites[0].sprites.other.officialArtwork.frontDefault != null){
+      sprites.add(pokemonV2PokemonSprites[0].sprites.other.officialArtwork.frontDefault!);
+    }
+
+    // Front Default
     if (pokemonV2PokemonSprites[0].sprites.frontDefault != null){
       sprites.add(pokemonV2PokemonSprites[0].sprites.frontDefault!);
     }

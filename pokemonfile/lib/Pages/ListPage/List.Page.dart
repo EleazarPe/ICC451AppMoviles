@@ -212,7 +212,7 @@ query samplePokeAPIquery {
                 }
 
               }
-              await getPokemonDB();
+              setState(() {});
             },
             icon: favoriteFilter == 1 ?
             const Icon(Icons.favorite_outlined, color: Colors.red,) :
@@ -228,12 +228,6 @@ query samplePokeAPIquery {
       context,
       MaterialPageRoute(builder: (context) => PokemonDetailsPage(pokemonDB: pokemon, onSonChanged: updatePokemonFromChild,)),
     );
-  }
-  Future<void> getPokemonDB() async {
-    List<Pokemon> list = await db.pokemonList();
-    setState(() {
-      pokemons = list;
-    });
   }
 
   void updatePokemonFromChild(Pokemon pokemonChild) {

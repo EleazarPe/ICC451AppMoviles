@@ -92,7 +92,7 @@ class _PokemonCardState extends State<PokemonCard> {
                     Center(
                       child: pokemon.sprites.isNotEmpty ?
                       CachedNetworkImage(
-                        imageUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/${pokemon.id}.png',
+                        imageUrl: pokemon.sprites[0],
                         placeholder: (context, url) => const Center(child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Colors.red))),
                         errorWidget: (context, url, error) => const Icon(Icons.error),
                         fit: BoxFit.cover,

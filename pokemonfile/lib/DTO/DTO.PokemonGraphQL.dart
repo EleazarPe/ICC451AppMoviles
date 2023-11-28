@@ -65,14 +65,74 @@ class PokemonV2PokemonSprites {
 class Sprites {
 
   String? frontDefault;
+  Other other;
 
   Sprites({
     required this.frontDefault,
+    required this.other,
   });
 
   factory Sprites.fromJson(Map<String, dynamic> json) =>  Sprites(
     frontDefault: json["front_default"],
+    other: Other.fromJson(json["other"]),
   );
+}
+
+class Other {
+
+  DreamWorld dreamWorld;
+  Home home;
+  OfficialArtwork officialArtwork;
+
+  Other({
+    required this.dreamWorld,
+    required this.home,
+    required this.officialArtwork,
+  });
+
+  factory Other.fromJson(Map<String, dynamic> json) => Other(
+    dreamWorld: DreamWorld.fromJson(json["dream_world"]),
+    home: Home.fromJson(json["home"]),
+    officialArtwork: OfficialArtwork.fromJson(json["official-artwork"]),
+  );
+}
+
+class OfficialArtwork {
+  String? frontDefault;
+
+  OfficialArtwork({
+    required this.frontDefault,
+  });
+
+  factory OfficialArtwork.fromJson(Map<String, dynamic> json) => OfficialArtwork(
+    frontDefault: json["front_default"],
+  );
+}
+
+class Home {
+  String? frontDefault;
+
+  Home({
+    required this.frontDefault,
+  });
+
+  factory Home.fromJson(Map<String, dynamic> json) => Home(
+    frontDefault: json["front_default"],
+  );
+}
+
+class DreamWorld {
+
+  String? frontDefault;
+
+  DreamWorld({
+    required this.frontDefault,
+  });
+
+  factory DreamWorld.fromJson(Map<String, dynamic> json) => DreamWorld(
+    frontDefault: json["front_default"],
+  );
+
 }
 
 class PokemonV2PokemonTypes {

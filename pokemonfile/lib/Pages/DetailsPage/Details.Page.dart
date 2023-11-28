@@ -45,6 +45,7 @@ class _PokemonDetailsPageState extends State<PokemonDetailsPage> {
   late Pokemon pokemonDB;
   late PokemonDetails pokemonDetails;
   late bool loading = true;
+  late bool loadingError = false;
 
   static const double _statsVerticalLength = 12.0;
 
@@ -249,50 +250,60 @@ class _PokemonDetailsPageState extends State<PokemonDetailsPage> {
 
   // Cargar los detalles del pokemon
   void loadPokemonDetails() async {
+
+    PO.PokemonOnly? pokeOnly;
+    PS.PokemonSpecies? pokemonSpecies;
+    EC.EvolutionChain? evolutionChain;
+
     print("\nLoading Pokemon Details\n");
-    http
-        .get(Uri.parse('https://pokeapi.co/api/v2/pokemon/${pokemonDB.id}/'))
-        .then((response) async {
+    await http.get(Uri.parse('https://pokeapi.co/api/v2/pokemon/${pokemonDB.id}/')).then((response) async {
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
-        PO.PokemonOnly pokeOnly = PO.PokemonOnly.fromJson(data);
+        pokeOnly = PO.PokemonOnly.fromJson(data);
         print("Success\n");
-        print("Loading Pokemon Species\n");
-        http.get(Uri.parse(pokeOnly.species.url)).then((response) async {
-          if (response.statusCode == 200) {
-            final data = json.decode(response.body);
-            PS.PokemonSpecies pokemonSpecies = PS.PokemonSpecies.fromJson(data);
-            print("Success\n");
-            print("Loading Pokemon Species\n");
-            http
-                .get(Uri.parse(pokemonSpecies.evolutionChain.url))
-                .then((response) {
-              if (response.statusCode == 200) {
-                final data = json.decode(response.body);
-                EC.EvolutionChain evolutionChain =
-                    EC.EvolutionChain.fromJson(data);
-                print("Success\n");
-                print("Converting DTOs to class\n");
-                pokemonDetails = injectDetails(pokeOnly, pokemonSpecies, evolutionChain);
-                setState(() {
-                  loading = false;
-                });
-              } else {
-                print("Failure\n");
-                throw Exception(
-                    'Failed to load evolution chain for pokemon ${pokemonDB.id}}');
-              }
-            });
-          } else {
-            print("Failure\n");
-            throw Exception(
-                'Failed to load species for pokemon ${pokemonDB.id}}');
-          }
-        });
       } else {
         print("Failure\n");
+        setState(() {
+          loadingError = true;
+        });
         throw Exception('Failed to load details for pokemon ${pokemonDB.id}}');
       }
+    });
+
+    print("Loading Pokemon Species\n");
+    await http.get(Uri.parse(pokeOnly!.species.url)).then((response) async {
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        pokemonSpecies = PS.PokemonSpecies.fromJson(data);
+        print("Success\n");
+      } else {
+        print("Failure\n");
+        setState(() {
+          loadingError = true;
+        });
+        throw Exception('Failed to load details for pokemon ${pokemonDB.id}}');
+      }
+    });
+
+    print("Loading Pokemon Evolutions\n");
+    await http.get(Uri.parse(pokemonSpecies!.evolutionChain.url)).then((response) {
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        evolutionChain = EC.EvolutionChain.fromJson(data);
+        print("Success\n");
+      } else {
+        print("Failure\n");
+        setState(() {
+          loadingError = true;
+        });
+        throw Exception('Failed to load evolution chain for pokemon ${pokemonDB.id}}');
+      }
+    });
+
+    print("Converting DTOs to class\n");
+    pokemonDetails = injectDetails(pokeOnly!, pokemonSpecies!, evolutionChain!);
+    setState(() {
+      loading = false;
     });
   }
 
