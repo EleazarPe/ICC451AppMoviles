@@ -23,6 +23,7 @@ class PokemonDetails {
   String growthRate;
   int hatchCounter;
   String flavorText;
+  List<String> abilities;
 
   // EvolutionChain
   List<Evolution> evolutionChain;
@@ -38,6 +39,7 @@ class PokemonDetails {
     required this.stats,
     required this.sprites,
     required this.moves,
+    required this.abilities,
 
     // PokemonSpecies
     required this.baseHappiness,
@@ -95,6 +97,9 @@ PokemonDetails injectDetails(PO.PokemonOnly pokemonOnly, PS.PokemonSpecies pokem
     stats: stats,
     sprites: sprites,
     moves: moves,
+    abilities: pokemonOnly.abilities.map((e) {
+      return e.ability.name;
+    }).toList(),
 
     // PokemonSpecies
     baseHappiness: pokemonSpecies.baseHappiness,

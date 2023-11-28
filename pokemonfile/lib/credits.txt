@@ -5,3 +5,5 @@ https://www.flaticon.com/free-icon/pokeball_361998?term=pokeball&page=1&position
 <a href="https://www.flaticon.com/free-icons/information" title="information icons">Information icons created by Freepik - Flaticon</a>
 <a href="https://www.flaticon.com/free-icons/stats" title="stats icons">Stats icons created by reussy - Flaticon</a>
 <a href="https://www.flaticon.com/free-icons/pokemon" title="pokemon icons">Pokemon icons created by Darius Dan - Flaticon</a>
+<a href="https://www.flaticon.com/free-icons/emoji" title="emoji icons">Emoji icons created by Freepik - Flaticon</a>
+

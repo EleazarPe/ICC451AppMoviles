@@ -76,24 +76,24 @@ class TabInformacion extends StatelessWidget {
           ),
         ),
 
+        // Texto de Caracteristicas
+        Container(
+          alignment: Alignment.centerLeft,
+          padding: EdgeInsets.only(top: 10),
+          child: const Text(
+            'Caracteristicas',
+            style: TextStyle(
+              fontSize: 30,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+
         // Padding para las caracteristicas del pokemon
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 3.0),
           child: Column(
             children: [
-              // Texto de Caracteristicas
-              Container(
-                alignment: Alignment.centerLeft,
-                padding: EdgeInsets.only(top: 10),
-                child: const Text(
-                  'Caracteristicas',
-                  style: TextStyle(
-                    fontSize: 30,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-
               // Informacion de la Altura
               Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -169,7 +169,78 @@ class TabInformacion extends StatelessWidget {
                   ),
                 ],
               ),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  // Contenedor con la imagen de Altura
+                  Container(
+                    padding: const EdgeInsets.all(5.0),
+                    child: const Image(
+                      image: AssetImage('assets/icons/happy.png'),
+                      height: 32.0,
+                    ),
+                  ),
+
+                  // Texto constante "Altura"
+                  const Text(
+                    'Amistad Base',
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+
+                  // Informacion de la Altura
+                  Expanded(
+                    child: Container(
+                      margin: const EdgeInsets.only(right: 5.0),
+                      alignment: Alignment.centerRight,
+                      child: Text(
+                        pokemonDetails.baseHappiness.toString(),
+                        style: const TextStyle(
+                          fontSize: 24,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ],
+          ),
+        ),
+
+        // Habilidades
+
+        Container(
+          alignment: Alignment.centerLeft,
+          padding: EdgeInsets.only(top: 10),
+          child: const Text(
+            'Habilidades',
+            style: TextStyle(
+              fontSize: 30,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 3.0),
+          child: Column(
+            children: pokemonDetails.abilities.map((e) {
+
+              return Container(
+                margin: const EdgeInsets.only(right: 5.0),
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  " - $e",
+                  style: const TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              );
+
+            }).toList(),
           ),
         ),
       ],
