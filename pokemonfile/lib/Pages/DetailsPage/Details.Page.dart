@@ -84,12 +84,14 @@ class _PokemonDetailsPageState extends State<PokemonDetailsPage> {
                   Container(
                     alignment: Alignment.center,
                     padding: const EdgeInsets.all(5.0),
-                    child: CachedNetworkImage(
-                      imageUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/${pokemonDB.id}.png',
+                    child: pokemonDB.sprites.isNotEmpty ?
+                    CachedNetworkImage(
+                      imageUrl: pokemonDB.sprites[0],
                       placeholder: (context, url) => const Center(child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Colors.red))),
                       errorWidget: (context, url, error) => const Icon(Icons.error),
                       fit: BoxFit.cover,
-                    ),
+                    ) :
+                    const Icon(Icons.error)
                   ),
                 ],
               )),

@@ -6,7 +6,7 @@ String pokeListToJson(PokemonOnly data) => json.encode(data.toJson());
 
 class PokemonOnly {
   List<Ability> abilities;
-  int baseExperience;
+  int? baseExperience;
   List<Species> forms;
   List<dynamic> gameIndices;
   int height;
@@ -253,7 +253,7 @@ class Other {
 }
 
 class Home {
-  String frontDefault;
+  String? frontDefault;
 
   Home({
     required this.frontDefault,

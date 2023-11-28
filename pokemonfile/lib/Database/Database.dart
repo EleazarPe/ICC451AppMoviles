@@ -181,10 +181,12 @@ class DatabaseHelper {
 
     if (dbPokemons.length == pokemonGraphQL.pokemonList.length){
       for (var i = 0 ; i < dbPokemons.length ; i ++){
-        dbPokemons[i].sprites = graphQLSpritesToPokemonSprites(pokemonGraphQL.pokemonList[i].pokemonV2PokemonSprites);
-        if (dbPokemons[i].id == 1){
+        dbPokemons[i].sprites = graphQLSpritesToPokemonSprites(pokemonGraphQL.pokemonList[i].pokemonV2PokemonSprites, dbPokemons[i].id);
+
+        if (dbPokemons[i].id == 1013){
           print(dbPokemons[i].sprites);
         }
+
       }
 
       return dbPokemons;
@@ -196,7 +198,7 @@ class DatabaseHelper {
       
       String type1 = p.pokemonV2PokemonTypes[0].pokemonV2Type.name;
       String type2 = p.pokemonV2PokemonTypes.length > 1 ? p.pokemonV2PokemonTypes[1].pokemonV2Type.name : "";
-      List<String> sprites = graphQLSpritesToPokemonSprites(p.pokemonV2PokemonSprites);
+      List<String> sprites = graphQLSpritesToPokemonSprites(p.pokemonV2PokemonSprites, p.id);
       Pokemon poke = Pokemon(
         id: p.id,
         favorite: 0,
@@ -223,7 +225,7 @@ class DatabaseHelper {
     return pokemons;
   }
 
-  List<String> graphQLSpritesToPokemonSprites(List<PQ.PokemonV2PokemonSprites> pokemonV2PokemonSprites) {
+  List<String> graphQLSpritesToPokemonSprites(List<PQ.PokemonV2PokemonSprites> pokemonV2PokemonSprites, int id) {
 
     List<String> sprites = [];
 
@@ -240,6 +242,10 @@ class DatabaseHelper {
     // Front Default
     if (pokemonV2PokemonSprites[0].sprites.frontDefault != null){
       sprites.add(pokemonV2PokemonSprites[0].sprites.frontDefault!);
+    }
+    
+    if(sprites.isEmpty){
+      sprites.add('https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/$id.png');
     }
 
     return sprites;

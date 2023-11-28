@@ -169,42 +169,6 @@ class TabInformacion extends StatelessWidget {
                   ),
                 ],
               ),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  // Contenedor con la imagen de Altura
-                  Container(
-                    padding: const EdgeInsets.all(5.0),
-                    child: const Image(
-                      image: AssetImage('assets/icons/happy.png'),
-                      height: 32.0,
-                    ),
-                  ),
-
-                  // Texto constante "Altura"
-                  const Text(
-                    'Amistad Base',
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-
-                  // Informacion de la Altura
-                  Expanded(
-                    child: Container(
-                      margin: const EdgeInsets.only(right: 5.0),
-                      alignment: Alignment.centerRight,
-                      child: Text(
-                        pokemonDetails.baseHappiness.toString(),
-                        style: const TextStyle(
-                          fontSize: 24,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
             ],
           ),
         ),

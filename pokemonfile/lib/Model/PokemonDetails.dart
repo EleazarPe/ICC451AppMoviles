@@ -13,11 +13,9 @@ class PokemonDetails {
   int height;
   int weight;
   List<Stat> stats;
-  List<String> sprites;
   List<Move> moves;
 
   // PokemonSpecies
-  int baseHappiness;
   int captureRate;
   String generation;
   String growthRate;
@@ -37,12 +35,10 @@ class PokemonDetails {
     required this.height,
     required this.weight,
     required this.stats,
-    required this.sprites,
     required this.moves,
     required this.abilities,
 
     // PokemonSpecies
-    required this.baseHappiness,
     required this.captureRate,
     required this.generation,
     required this.growthRate,
@@ -65,9 +61,14 @@ PokemonDetails injectDetails(PO.PokemonOnly pokemonOnly, PS.PokemonSpecies pokem
   });
 
   List<String> sprites = [];
-  sprites.add(pokemonOnly.sprites.other.home.frontDefault);
-
-  String flavorText = pokemonSpecies.flavorTextEntries.where((element) => element.language.name == "es").toList()[0].flavorText;
+  if (pokemonOnly.sprites.other.home.frontDefault != null){
+    sprites.add(pokemonOnly.sprites.other.home.frontDefault!);
+  }
+  String flavorText = "";
+  List<PS.FlavorTextEntries> flavorList = pokemonSpecies.flavorTextEntries.where((element) => element.language.name == "es").toList();
+  if (flavorList.isNotEmpty){
+    flavorText = flavorList[0].flavorText;
+  }
 
   List<Evolution> evolutions = [
     Evolution(
@@ -95,14 +96,12 @@ PokemonDetails injectDetails(PO.PokemonOnly pokemonOnly, PS.PokemonSpecies pokem
     height: pokemonOnly.height,
     weight: pokemonOnly.weight,
     stats: stats,
-    sprites: sprites,
     moves: moves,
     abilities: pokemonOnly.abilities.map((e) {
       return e.ability.name;
     }).toList(),
 
     // PokemonSpecies
-    baseHappiness: pokemonSpecies.baseHappiness,
     captureRate: pokemonSpecies.captureRate,
     hatchCounter: pokemonSpecies.hatchCounter,
     generation: pokemonSpecies.generation.name,

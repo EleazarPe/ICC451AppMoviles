@@ -69,7 +69,9 @@ class TabEvoluciones extends StatelessWidget {
           Expanded(
             child: GestureDetector(
               onTap: () {
-                print(evolution.name);
+                if (pokemonDetails.id != evolution.id){
+
+                }
               },
               child: Container(
                 alignment: Alignment.center,
@@ -91,7 +93,4 @@ class TabEvoluciones extends StatelessWidget {
       ),
     );
   }
-
-
-
 }
