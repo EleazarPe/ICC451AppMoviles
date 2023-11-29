@@ -13,7 +13,7 @@ import '../../Database/Database.dart';
 import '../../Model/Pokemon.dart';
 import '../../Model/PokemonDetails.dart';
 
-typedef PokemonCallBack = void Function(Pokemon pokemon);
+typedef PokemonCallBack = void Function(int id, int favorite);
 
 class PokemonDetailsPage extends StatefulWidget {
 
@@ -242,8 +242,8 @@ class _PokemonDetailsPageState extends State<PokemonDetailsPage> {
             onPressed: () async {
               List<Pokemon> poke = await db.changeFavorite(pokemonDB.id);
               setState(() {
-                pokemonDB = poke[0];
-                onSonChanged(pokemonDB);
+                pokemonDB.favorite = poke[0].favorite;
+                onSonChanged(pokemonDB.id, pokemonDB.favorite);
               });
             },
           ),
@@ -252,13 +252,14 @@ class _PokemonDetailsPageState extends State<PokemonDetailsPage> {
 
   // Cargar los detalles del pokemon
   void loadPokemonDetails() async {
-
     PO.PokemonOnly? pokeOnly;
     PS.PokemonSpecies? pokemonSpecies;
     EC.EvolutionChain? evolutionChain;
 
     print("\nLoading Pokemon Details\n");
-    await http.get(Uri.parse('https://pokeapi.co/api/v2/pokemon/${pokemonDB.id}/')).then((response) async {
+    await http.get(
+        Uri.parse('https://pokeapi.co/api/v2/pokemon/${pokemonDB.id}/')).then((
+        response) async {
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
         pokeOnly = PO.PokemonOnly.fromJson(data);
@@ -288,7 +289,8 @@ class _PokemonDetailsPageState extends State<PokemonDetailsPage> {
     });
 
     print("Loading Pokemon Evolutions\n");
-    await http.get(Uri.parse(pokemonSpecies!.evolutionChain.url)).then((response) {
+    await http.get(Uri.parse(pokemonSpecies!.evolutionChain.url)).then((
+        response) {
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
         evolutionChain = EC.EvolutionChain.fromJson(data);
@@ -298,7 +300,8 @@ class _PokemonDetailsPageState extends State<PokemonDetailsPage> {
         setState(() {
           loadingError = true;
         });
-        throw Exception('Failed to load evolution chain for pokemon ${pokemonDB.id}}');
+        throw Exception(
+            'Failed to load evolution chain for pokemon ${pokemonDB.id}}');
       }
     });
 
@@ -309,9 +312,5 @@ class _PokemonDetailsPageState extends State<PokemonDetailsPage> {
     });
   }
 
-  Future<void> updatePokemonDB() async {
-    List<Pokemon> list = await db.pokemonId(pokemonDB.id);
-    pokemonDB = list[0];
-    setState(() {});
-  }
+
 }

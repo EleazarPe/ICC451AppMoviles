@@ -230,11 +230,11 @@ query samplePokeAPIquery {
     );
   }
 
-  void updatePokemonFromChild(Pokemon pokemonChild) {
+  void updatePokemonFromChild(int id, int favorite) {
     for(int i = 0 ; i < pokemons.length ; i ++){
-      if (pokemons[i].id == pokemonChild.id){
+      if (pokemons[i].id == id){
         setState(() {
-          pokemons[i] = pokemonChild;
+          pokemons[i].favorite = favorite;
         });
         return;
       }

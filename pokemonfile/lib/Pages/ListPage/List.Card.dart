@@ -8,7 +8,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 
 import '../../Model/Pokemon.dart';
 
-typedef PokemonCallBack = void Function(Pokemon pokemon);
+typedef PokemonCallBack = void Function(int id, int favorite);
 
 class PokemonCard extends StatefulWidget {
 
@@ -155,7 +155,7 @@ class _PokemonCardState extends State<PokemonCard> {
     List<Pokemon> poke = await db.changeFavorite(pokemon.id);
     setState(() {
       pokemon.favorite = poke[0].favorite;
-      onSonChanged(pokemon);
+      onSonChanged(pokemon.id, pokemon.favorite);
     });
   }
 
