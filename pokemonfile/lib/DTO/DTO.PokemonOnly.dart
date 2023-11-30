@@ -221,35 +221,57 @@ class VersionGroupDetail {
 }
 
 class Sprites {
+
+  String? frontDefault;
   Other other;
 
   Sprites({
     required this.other,
+    required this.frontDefault
   });
 
   factory Sprites.fromJson(Map<String, dynamic> json) => Sprites(
+    frontDefault: json["front_default"],
     other: Other.fromJson(json["other"]),
   );
 
   Map<String, dynamic> toJson() => {
     "other": other.toJson(),
+    "front_default": frontDefault,
   };
 }
 
 class Other {
   Home home;
+  OfficialArtwork officialArtwork;
 
   Other({
     required this.home,
+    required this.officialArtwork,
   });
 
   factory Other.fromJson(Map<String, dynamic> json) => Other(
     home: Home.fromJson(json["home"]),
+    officialArtwork: OfficialArtwork.fromJson(json["official-artwork"]),
   );
 
   Map<String, dynamic> toJson() => {
     "home": home.toJson(),
   };
+}
+
+class OfficialArtwork {
+
+  String? frontDefault;
+
+  OfficialArtwork({
+    required this.frontDefault,
+  });
+
+  factory OfficialArtwork.fromJson(Map<String, dynamic> json) => OfficialArtwork(
+    frontDefault: json["front_default"],
+  );
+
 }
 
 class Home {

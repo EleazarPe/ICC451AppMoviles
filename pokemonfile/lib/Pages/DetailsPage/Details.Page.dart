@@ -18,34 +18,37 @@ typedef PokemonCallBack = void Function(int id, int favorite);
 class PokemonDetailsPage extends StatefulWidget {
 
   final PokemonCallBack onSonChanged;
-  final Pokemon pokemonDB;
+  final int id;
 
   PokemonDetailsPage({
-    required this.pokemonDB,
     required this.onSonChanged,
+    required this.id,
   });
 
   @override
   _PokemonDetailsPageState createState() =>
       _PokemonDetailsPageState(
-        pokemonDB: pokemonDB,
+        pokemonId: id,
         onSonChanged: onSonChanged,
       );
 }
 
 class _PokemonDetailsPageState extends State<PokemonDetailsPage> {
   _PokemonDetailsPageState({
-    required this.pokemonDB,
+    required this.pokemonId,
     required this.onSonChanged,
   });
 
-
+  final int pokemonId;
   final PokemonCallBack onSonChanged;
   DatabaseHelper db = DatabaseHelper();
-  late Pokemon pokemonDB;
+  //late Pokemon pokemonDB;
   late PokemonDetails pokemonDetails;
   late bool loading = true;
   late bool loadingError = false;
+  bool favorite = false;
+
+  List<String> sprites = [];
 
   static const double _statsVerticalLength = 12.0;
 
@@ -61,7 +64,10 @@ class _PokemonDetailsPageState extends State<PokemonDetailsPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return loading ?
+        // TODO: ADD A LOADING BIT HERE TO MAKE IT MORE SEEMLESS
+    Scaffold() :
+    Scaffold(
       appBar: DetailsAppBar(),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -84,9 +90,9 @@ class _PokemonDetailsPageState extends State<PokemonDetailsPage> {
                   Container(
                     alignment: Alignment.center,
                     padding: const EdgeInsets.all(5.0),
-                    child: pokemonDB.sprites.isNotEmpty ?
+                    child: pokemonDetails.sprites.isNotEmpty ?
                     CachedNetworkImage(
-                      imageUrl: pokemonDB.sprites[0],
+                      imageUrl: pokemonDetails.sprites[0],
                       placeholder: (context, url) => const Center(child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Colors.red))),
                       errorWidget: (context, url, error) => const Icon(Icons.error),
                       fit: BoxFit.cover,
@@ -203,7 +209,7 @@ class _PokemonDetailsPageState extends State<PokemonDetailsPage> {
   Widget _buildSectionEvoluciones() {
     return loading
         ? ListView()
-        : TabEvoluciones(pokemonDetails: pokemonDetails);
+        : TabEvoluciones(pokemonDetails: pokemonDetails, onSonChanged: updatePokemonFromChild);
   }
 
   // Tab de Movimientos
@@ -215,8 +221,9 @@ class _PokemonDetailsPageState extends State<PokemonDetailsPage> {
 
   // AppBar para la pagina de detalles
   AppBar DetailsAppBar() {
-    return AppBar(
-        title: Text(pokemonDB.name),
+    return loading ? AppBar() :
+    AppBar(
+        title: Text(pokemonDetails.name),
         //backgroundColor: Color.fromARGB(255, 202, 0, 16),
         backgroundColor: loading
             ? const Color.fromARGB(255, 202, 0, 16)
@@ -225,7 +232,7 @@ class _PokemonDetailsPageState extends State<PokemonDetailsPage> {
           Container(
             alignment: Alignment.centerRight,
             child: Text(
-              '${pokemonDB.id}',
+              '${pokemonDetails.id}',
               textAlign: TextAlign.center,
               style: const TextStyle(fontSize: 24),
             ),
@@ -233,17 +240,17 @@ class _PokemonDetailsPageState extends State<PokemonDetailsPage> {
 
           // Favorite Icon
           IconButton(
-            icon: pokemonDB.favoriteBool()
+            icon: favorite
                 ? const Icon(
                     Icons.favorite_outlined,
                     color: Colors.red,
                   )
                 : const Icon(Icons.favorite_border_outlined),
             onPressed: () async {
-              List<Pokemon> poke = await db.changeFavorite(pokemonDB.id);
+              List<Pokemon> poke = await db.changeFavorite(pokemonDetails.id);
               setState(() {
-                pokemonDB.favorite = poke[0].favorite;
-                onSonChanged(pokemonDB.id, pokemonDB.favorite);
+                favorite = poke[0].favoriteBool();
+                onSonChanged(pokemonId, poke[0].favorite);
               });
             },
           ),
@@ -258,7 +265,7 @@ class _PokemonDetailsPageState extends State<PokemonDetailsPage> {
 
     print("\nLoading Pokemon Details\n");
     await http.get(
-        Uri.parse('https://pokeapi.co/api/v2/pokemon/${pokemonDB.id}/')).then((
+        Uri.parse('https://pokeapi.co/api/v2/pokemon/$pokemonId/')).then((
         response) async {
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
@@ -269,7 +276,7 @@ class _PokemonDetailsPageState extends State<PokemonDetailsPage> {
         setState(() {
           loadingError = true;
         });
-        throw Exception('Failed to load details for pokemon ${pokemonDB.id}}');
+        throw Exception('Failed to load details for pokemon $pokemonId}');
       }
     });
 
@@ -284,7 +291,7 @@ class _PokemonDetailsPageState extends State<PokemonDetailsPage> {
         setState(() {
           loadingError = true;
         });
-        throw Exception('Failed to load details for pokemon ${pokemonDB.id}}');
+        throw Exception('Failed to load details for pokemon $pokemonId}');
       }
     });
 
@@ -301,16 +308,33 @@ class _PokemonDetailsPageState extends State<PokemonDetailsPage> {
           loadingError = true;
         });
         throw Exception(
-            'Failed to load evolution chain for pokemon ${pokemonDB.id}}');
+            'Failed to load evolution chain for pokemon $pokemonId}');
       }
     });
 
     print("Converting DTOs to class\n");
     pokemonDetails = injectDetails(pokeOnly!, pokemonSpecies!, evolutionChain!);
+
+    List<Pokemon> poke = await db.pokemonId(pokemonDetails.id);
+    favorite = poke[0].favoriteBool();
+
     setState(() {
       loading = false;
     });
   }
+
+  void updatePokemonFromChild(int id, int favorite){
+    onSonChanged(id, favorite);
+  }
+
+  void _openPokemonDetails(BuildContext context, int id) {
+    setState(() {});
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => PokemonDetailsPage(id: id, onSonChanged: updatePokemonFromChild)),
+    );
+  }
+
 
 
 }

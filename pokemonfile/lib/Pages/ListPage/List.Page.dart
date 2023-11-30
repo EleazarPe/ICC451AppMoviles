@@ -136,7 +136,7 @@ class _ListPageState extends State<ListPage> {
                   padding: EdgeInsets.all(4),
                   child: GestureDetector(
                     onTap: () {
-                      _openPokemonDetails(context, getPokemonId(pokemons, displayedPokemons[index].id));
+                      _openPokemonDetails(context, displayedPokemons[index].id);
                     },
 
                     // Pokemon Card
@@ -222,11 +222,11 @@ query samplePokeAPIquery {
     );
   }
 
-  void _openPokemonDetails(BuildContext context, Pokemon pokemon) {
+  void _openPokemonDetails(BuildContext context, int id) {
     setState(() {});
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => PokemonDetailsPage(pokemonDB: pokemon, onSonChanged: updatePokemonFromChild,)),
+      MaterialPageRoute(builder: (context) => PokemonDetailsPage(id: id, onSonChanged: updatePokemonFromChild,)),
     );
   }
 

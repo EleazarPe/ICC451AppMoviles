@@ -14,6 +14,7 @@ class PokemonDetails {
   int weight;
   List<Stat> stats;
   List<Move> moves;
+  List<String> sprites;
 
   // PokemonSpecies
   int captureRate;
@@ -37,6 +38,7 @@ class PokemonDetails {
     required this.stats,
     required this.moves,
     required this.abilities,
+    required this.sprites,
 
     // PokemonSpecies
     required this.captureRate,
@@ -64,6 +66,16 @@ PokemonDetails injectDetails(PO.PokemonOnly pokemonOnly, PS.PokemonSpecies pokem
   if (pokemonOnly.sprites.other.home.frontDefault != null){
     sprites.add(pokemonOnly.sprites.other.home.frontDefault!);
   }
+  if (pokemonOnly.sprites.other.officialArtwork.frontDefault != null){
+    sprites.add(pokemonOnly.sprites.other.officialArtwork.frontDefault!);
+  }
+  if (pokemonOnly.sprites.frontDefault != null){
+    sprites.add(pokemonOnly.sprites.frontDefault!);
+  }
+  if(sprites.isEmpty){
+    sprites.add('https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokemonOnly.id}.png');
+  }
+
   String flavorText = "";
   List<PS.FlavorTextEntries> flavorList = pokemonSpecies.flavorTextEntries.where((element) => element.language.name == "es").toList();
   if (flavorList.isNotEmpty){
@@ -88,6 +100,7 @@ PokemonDetails injectDetails(PO.PokemonOnly pokemonOnly, PS.PokemonSpecies pokem
     moves.add(Move(id: int.parse(element.move.url.split("/")[6]), name: element.move.name));
   });
 
+
   return PokemonDetails(
     // Pokemon Details
     id: pokemonOnly.id,
@@ -100,6 +113,7 @@ PokemonDetails injectDetails(PO.PokemonOnly pokemonOnly, PS.PokemonSpecies pokem
     abilities: pokemonOnly.abilities.map((e) {
       return e.ability.name;
     }).toList(),
+    sprites: sprites,
 
     // PokemonSpecies
     captureRate: pokemonSpecies.captureRate,
