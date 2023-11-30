@@ -87,6 +87,8 @@ class _TabEvolucionesState extends State<TabEvoluciones> {
       height: 100,
       alignment: Alignment.center,
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Expanded(
             child: GestureDetector(
@@ -98,12 +100,24 @@ class _TabEvolucionesState extends State<TabEvoluciones> {
               child: Container(
                 alignment: Alignment.center,
                 padding: const EdgeInsets.all(5.0),
-                child: CachedNetworkImage(
-                  imageUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${evolution.id}.png',
-                  placeholder: (context, url) => const Center(child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Colors.red))),
-                  errorWidget: (context, url, error) => const Icon(Icons.error),
-                  fit: BoxFit.cover,
-                ),
+                child: Stack(
+                  children: [
+                    Center(
+                      child: CachedNetworkImage(
+                        imageUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${evolution.id}.png',
+                        placeholder: (context, url) => const Center(child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Colors.red))),
+                        errorWidget: (context, url, error) => const Icon(Icons.error),
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+
+                    // Nivel minimo
+                    Container(
+                      alignment: Alignment.bottomLeft,
+                      child: Text(evolution.minLevel != null ? "LV ${evolution.minLevel.toString()}" : "",),
+                    )
+                  ],
+                )
               ),
             ),
           ),

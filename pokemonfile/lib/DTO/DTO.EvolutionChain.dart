@@ -51,21 +51,38 @@ class EvolvesTo {
 
   Species species;
   List<EvolvesTo> evolvesTo;
+  List<EvolutionDetails> evolutionDetails;
 
   EvolvesTo({
     required this.species,
     required this.evolvesTo,
+    required this.evolutionDetails,
   });
 
   factory EvolvesTo.fromJson(Map<String, dynamic> json) => EvolvesTo(
     species: Species.fromJson(json["species"]),
     evolvesTo: List<EvolvesTo>.from(json["evolves_to"].map((x) => EvolvesTo.fromJson(x))),
+    evolutionDetails: List<EvolutionDetails>.from(json["evolution_details"].map((x) => EvolutionDetails.fromJson(x)))
   );
 
   Map<String, dynamic> toJson() => {
     "species": species.toJson(),
     "evolves_to": List<dynamic>.from(evolvesTo.map((x) => x.toJson())),
   };
+
+}
+
+class EvolutionDetails {
+
+  int? minLevel;
+
+  EvolutionDetails({
+    required this.minLevel,
+  });
+
+  factory EvolutionDetails.fromJson(Map<String, dynamic> json) => EvolutionDetails(
+      minLevel: json["min_level"],
+  );
 
 }
 

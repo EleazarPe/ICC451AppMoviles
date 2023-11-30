@@ -87,6 +87,7 @@ PokemonDetails injectDetails(PO.PokemonOnly pokemonOnly, PS.PokemonSpecies pokem
       id: int.parse(evolutionChain.chain.species.url.split('/')[6]),
       name: evolutionChain.chain.species.name,
       evolvesTo: obtainEvolutions(evolutionChain.chain.evolvesTo),
+      minLevel: null
     ),
   ];
 
@@ -137,6 +138,7 @@ List<Evolution> obtainEvolutions(List<EvolvesTo> evolvesTo){
       id: int.parse(e.species.url.split('/')[6]),
       name: e.species.name,
       evolvesTo: obtainEvolutions(e.evolvesTo),
+      minLevel: e.evolutionDetails.isNotEmpty ? e.evolutionDetails[0].minLevel : null,
     );
     evolutions.add(evolution);
   });
@@ -148,11 +150,13 @@ class Evolution {
   int id;
   String name;
   List<Evolution> evolvesTo;
+  int? minLevel;
 
   Evolution({
     required this.id,
     required this.name,
     required this.evolvesTo,
+    required this.minLevel,
   });
 
 }
