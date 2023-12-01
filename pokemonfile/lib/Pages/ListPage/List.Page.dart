@@ -89,36 +89,41 @@ class _ListPageState extends State<ListPage> {
         children: [
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Row(
-              children: [
-
-                Expanded(
-
-                  // Buscar Pokemon
-                  child: TextField(
-                    decoration: InputDecoration(
-                      hintText: 'Buscar Pokémon',
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8.0),
+            child: Container(
+              height: 50,
+              padding: EdgeInsets.all(8.0),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20.0),
+                color: Colors.grey[200], // Color gris claro
+              ),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: TextField(
+                      decoration: const InputDecoration(
+                        hintText: 'Buscar Pokémon',
+                        border: InputBorder.none,
                       ),
+                      onChanged: (value) {
+                        setState(() {
+                          searchString = value;
+                        });
+                      },
+                      style: const TextStyle(fontSize: 14.0),
                     ),
-                    onChanged: (value) {
-                      setState(() {
-                        searchString = value;
-                      });
-                    },style: const TextStyle(fontSize: 14.0),
-                  ),
-                ),
-                IconButton(
-                  icon: const Icon(Icons.search),
-                  onPressed: () {
-                    FocusScope.of(context).unfocus();
-                  },
-                ),
-              ],
+                  ), Align(
+                    alignment: Alignment.center,
+                    child: IconButton(
+                      icon: const Icon(Icons.search),
+                      onPressed: () {
+                        FocusScope.of(context).unfocus();
+                      },
+                    ),
+                  ) ,
+                ],
+              ),
             ),
           ),
-
 
           // Lista de Pokemon
           Expanded(

@@ -101,10 +101,10 @@ packages:
     dependency: transitive
     description:
       name: ffi
-      sha256: "13a6ccf6a459a125b3fcdb6ec73bd5ff90822e071207c663bfd1f70062d51d18"
+      sha256: "7bf0adc28a23d395f19f3f1eb21dd7cfd1dd9f8e1c50051c069122e6853bc878"
       url: "https://pub.dev"
     source: hosted
-    version: "1.2.1"
+    version: "2.1.0"
   file:
     dependency: transitive
     description:
@@ -151,18 +151,18 @@ packages:
     dependency: transitive
     description:
       name: gql
-      sha256: "58f36a75c30e0d68b367cbf47024e7f08f15a1ab349b57bda1b23586e5d70a90"
+      sha256: aa3e0be4548353007b6e6fd24fcad0ce8c1179f9cb2ae5239d392fddb84a5ce5
       url: "https://pub.dev"
     source: hosted
-    version: "1.0.1-alpha+1700349941413"
+    version: "1.0.1-alpha+1700868214564"
   gql_dedupe_link:
     dependency: transitive
     description:
       name: gql_dedupe_link
-      sha256: "810fc7f9f64edbcc96f592129ce22cfb088aebd336abde0b14d4bc898390baf1"
+      sha256: e97e3f9490add43ba96cf5cc02d9d10a3723965c0bcc7bb1e04ef4f2e7a31a00
       url: "https://pub.dev"
     source: hosted
-    version: "2.0.4-alpha+1700349941497"
+    version: "2.0.4-alpha+1700868214643"
   gql_error_link:
     dependency: transitive
     description:
@@ -191,10 +191,10 @@ packages:
     dependency: transitive
     description:
       name: gql_link
-      sha256: af3555f29db00000e732d687d4a1664beb47c4133e851457e4d5e1b0ad5ac948
+      sha256: "48dbf63b4831d800a2ce9675c9fecea3c9f2801de92072c7644a4bc52aa26c13"
       url: "https://pub.dev"
     source: hosted
-    version: "1.0.1-alpha+1700349941428"
+    version: "1.0.1-alpha+1700868214578"
   gql_transform_link:
     dependency: transitive
     description:
@@ -311,10 +311,10 @@ packages:
     dependency: transitive
     description:
       name: path_provider
-      sha256: "3087813781ab814e4157b172f1a11c46be20179fcc9bea043e0fba36bc0acaa2"
+      sha256: a1aa8aaa2542a6bc57e381f132af822420216c80d4781f7aa085ca3229208aaa
       url: "https://pub.dev"
     source: hosted
-    version: "2.0.15"
+    version: "2.1.1"
   path_provider_android:
     dependency: transitive
     description:
@@ -351,10 +351,10 @@ packages:
     dependency: transitive
     description:
       name: path_provider_windows
-      sha256: a34ecd7fb548f8e57321fd8e50d865d266941b54e6c3b7758cf8f37c24116905
+      sha256: "8bc9f22eee8690981c22aa7fc602f5c85b497a6fb2ceb35ee5a5e5ed85ad8170"
       url: "https://pub.dev"
     source: hosted
-    version: "2.0.7"
+    version: "2.2.1"
   petitparser:
     dependency: transitive
     description:
@@ -375,10 +375,10 @@ packages:
     dependency: transitive
     description:
       name: plugin_platform_interface
-      sha256: da3fdfeccc4d4ff2da8f8c556704c08f912542c5fb3cf2233ed75372384a034d
+      sha256: f4f88d4a900933e7267e2b353594774fc0d07fb072b47eedcd5b54e1ea3269f8
       url: "https://pub.dev"
     source: hosted
-    version: "2.1.6"
+    version: "2.1.7"
   rxdart:
     dependency: transitive
     description:
@@ -412,10 +412,10 @@ packages:
     dependency: transitive
     description:
       name: sqflite_common
-      sha256: "8ed044102f3135add97be8653662052838859f5400075ef227f8ad72ae320803"
+      sha256: bb4738f15b23352822f4c42a531677e5c6f522e079461fd240ead29d8d8a54a6
       url: "https://pub.dev"
     source: hosted
-    version: "2.5.0+1"
+    version: "2.5.0+2"
   stack_trace:
     dependency: transitive
     description:
@@ -508,10 +508,10 @@ packages:
     dependency: transitive
     description:
       name: win32
-      sha256: c0e3a4f7be7dae51d8f152230b86627e3397c1ba8c3fa58e63d44a9f3edc9cef
+      sha256: b0f37db61ba2f2e9b7a78a1caece0052564d1bc70668156cf3a29d676fe4e574
       url: "https://pub.dev"
     source: hosted
-    version: "2.6.1"
+    version: "5.1.1"
   xdg_directories:
     dependency: transitive
     description:
