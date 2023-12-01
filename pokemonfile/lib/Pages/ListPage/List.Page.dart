@@ -82,7 +82,29 @@ class _ListPageState extends State<ListPage> {
 
     }).toList();
 
-    return
+    return loading ?
+      Scaffold(
+        body: Center(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Center (
+                child: Image(
+                  image: AssetImage("assets/gif/pikachu-running.gif"),
+                  height: 75,
+                ),
+              ),
+              Container(
+                alignment: Alignment.center,
+                margin: const EdgeInsets.all(10.0),
+                child: const Text("Loading..."),
+              ),
+            ],
+          ),
+        ),
+      ) :
+
       Scaffold(
       appBar: appBarList(),
       body: Column(

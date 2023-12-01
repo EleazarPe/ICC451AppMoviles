@@ -66,7 +66,28 @@ class _PokemonDetailsPageState extends State<PokemonDetailsPage> {
   Widget build(BuildContext context) {
     return loading ?
         // TODO: ADD A LOADING BIT HERE TO MAKE IT MORE SEEMLESS
-    Scaffold() :
+    Scaffold(
+      body: Center(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Center (
+              child: Image(
+                image: AssetImage("assets/gif/pikachu-running.gif"),
+                height: 75,
+              ),
+            ),
+            Container(
+              alignment: Alignment.center,
+              margin: const EdgeInsets.all(10.0),
+              child: const Text("Loading..."),
+            ),
+          ],
+        ),
+      ),
+    ) :
+
     Scaffold(
       appBar: DetailsAppBar(),
       body: Column(
