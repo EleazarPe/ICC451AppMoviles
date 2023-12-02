@@ -66,3 +66,29 @@ Hemos agregado varias animaciones en la aplicacion para que los usuarios se sien
 
 # Documentacion
 #### [Regresar a Contenidos](#contenidos)
+
+- [Estructura del Proyecto](#estructura-del-proyecto)
+
+### Estructura del Proyecto
+
+Los folders y documentos estan organizados en manera de arbol, se hace facil ver a simple ver como esta compuesto el proyecto
+
+![image](https://github.com/EleazarPe/ICC451AppMoviles/assets/132306836/b96187ea-5ec8-4652-8648-f76b2f730ac0)
+
+### Base de Datos y como accesarlas
+
+La base de datos esta basada en SQLite, esta contiene una tabla "pokemons".
+
+La tabla pokemons tiene 5 datos:
+- id INTEGER PRIMARY KEY; id del pokemon.
+- favorite INTEGER; 1 si el pokemon es una favorito 0 si no lo es.
+- name STRING; nombre del pokemon.
+- type1 STRING; primer tipo del pokemon.
+- tepy2 STRING; segundo tipo del pokemon, estara como "" si no tiene.
+
+La base de datos se puede accesar con el database Helper. Aparte de las funciones del CRUD normal tenemos algunas diferentes.
+- Future<List<Pokemon>> pokemonId(int id); obtiene el pokemon con el id especifico y retorna una lista con ese pokemon, si esta vacia es que no se encontro el pokemon.
+- Future<List<Pokemon>> changeFavorite(int id); cambia es el estado de favorito de el pokemon con un id en especifico.
+- Future<List<Pokemon>> updateDatabase(PQ.PokemonGraphQL pokemonGraphQL); Toma el Json proveniente de graphQL con la lista de los pokemons y actualiza la base de datos, tambien agrega los sprites a la lista en memoria de los pokemones. Es llamada al principio de la apliacacion.
+
+
