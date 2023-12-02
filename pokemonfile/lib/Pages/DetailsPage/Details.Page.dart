@@ -242,9 +242,11 @@ class _PokemonDetailsPageState extends State<PokemonDetailsPage> {
 
   // AppBar para la pagina de detalles
   AppBar DetailsAppBar() {
-    return loading ? AppBar() :
-    AppBar(
-        title: Text(pokemonDetails.name),
+
+    pokemonDetails.name.replaceAll('-', ' ');
+
+    return AppBar(
+        title: Text(pokemonDetails.name.substring(0, 1).toUpperCase() + pokemonDetails.name.substring(1).replaceAll('-', ' ')),
         //backgroundColor: Color.fromARGB(255, 202, 0, 16),
         backgroundColor: loading
             ? const Color.fromARGB(255, 202, 0, 16)

@@ -126,7 +126,7 @@ class _PokemonCardState extends State<PokemonCard> {
                       Expanded(
                         flex: 1,
                         child: AutoSizeText(
-                          pokemon.name,
+                          pokemon.name.substring(0, 1).toUpperCase() + pokemon.name.substring(1).replaceAll('-', ' '),
                           minFontSize: 12,
                           maxFontSize: 24,
                           overflow: TextOverflow.ellipsis,
@@ -204,7 +204,7 @@ class _PokemonCardState extends State<PokemonCard> {
             borderRadius: BorderRadius.circular(8.0),
           ),
           child: Text(
-            pokemon.type1,
+            pokemon.type1.substring(0, 1).toUpperCase() + pokemon.type1.substring(1).replaceAll('-', ' '),
             style: TextStyle(color: textColor),
             textAlign: TextAlign.center,
           ),
@@ -225,7 +225,7 @@ class _PokemonCardState extends State<PokemonCard> {
             borderRadius: BorderRadius.circular(8.0),
           ),
           child: Text(
-            pokemon.type2,
+            pokemon.type2.substring(0, 1).toUpperCase() + pokemon.type2.substring(1).replaceAll('-', ' '),
             style: TextStyle(color: textColor),
             textAlign: TextAlign.center,
           ),

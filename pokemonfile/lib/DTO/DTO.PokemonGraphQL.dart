@@ -18,7 +18,27 @@ class PokemonGraphQL {
   Map<String, dynamic> toJson() => {
     "pokemon_v2_pokemon": List<dynamic>.from(pokemonList.map((x) => x.toJson())),
   };
-  
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is PokemonGraphQL &&
+          runtimeType == other.runtimeType &&
+          pokemonList == other.pokemonList;
+
+  @override
+  int get hashCode {
+    int hash = 0;
+
+    pokemonList.forEach((p) {
+      hash = hash ^ p.id.hashCode ^ p.name.hashCode;
+      p.pokemonV2PokemonTypes.forEach((t) {
+        hash = hash ^ t.pokemonV2Type.name.hashCode;
+      });
+    });
+
+    return hash;
+  }
 }
 
 class PokemonV2Pokemon {

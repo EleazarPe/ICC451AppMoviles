@@ -213,13 +213,20 @@ query samplePokeAPIquery {
       document: gql(queryPokemons),
     );
 
-    var result = await client.query(options).whenComplete(() => print("Finished"));
-    PokemonGraphQL pokemonGraphQL = PokemonGraphQL.fromJson(result.data!);
+    try{
+      var result = await client.query(options).whenComplete(() => print("Finished"));
+      if (result.data != null){
+        PokemonGraphQL pokemonGraphQL = PokemonGraphQL.fromJson(result.data!);
+        pokemons = await db.updateDatabase(pokemonGraphQL, pokemonGraphQL.hashCode);
+        setState(() {
+          loading = false;
+        });
+      }
 
-    pokemons = await db.updateDatabase(pokemonGraphQL);
-    setState(() {
-      loading = false;
-    });
+    }catch(e){
+      print("Error getting data");
+    }
+
   }
 
   AppBar appBarList(){

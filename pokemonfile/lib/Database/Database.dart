@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:ffi';
 
+import 'package:flutter/foundation.dart';
 import 'package:path/path.dart';
 import 'package:pokemonfile/DTO/DTO.PokemonGraphQL.dart' as PQ;
 import 'package:sqflite/sqflite.dart';
@@ -41,6 +42,46 @@ class DatabaseHelper {
           'hash INTEGER '
           ')',
     );
+
+  }
+
+  Future<List<int>> hashList() async {
+
+    final db = await _database;
+
+    final List<Map<String, dynamic>> maps = await db.query('hash');
+
+    return List.generate(maps.length, (i) {
+      return maps[i]['hash'] as int;
+    });
+
+  }
+
+  Future<void> insertHash(int hash) async {
+    final db = await _database;
+
+    Map<String, dynamic> map = {
+      'id': 1,
+      'hash': hash,
+    };
+
+    List<int> list = await hashList();
+
+    if (list.isEmpty){
+      await db.insert(
+          'hash',
+          map,
+          conflictAlgorithm: ConflictAlgorithm.replace
+      );
+    }else{
+      await db.update(
+        'hash',
+        map,
+        where: 'id = ?',
+        whereArgs: [1],
+      );
+    }
+    print("New Hash has been saved");
 
   }
 
@@ -134,21 +175,6 @@ class DatabaseHelper {
     );
   }
 
-  // Revisar si un pokemon es favorito o no
-  Future<bool> isFavorite(int id) async {
-    bool ret = false;
-
-    // Hacer una llamada a la base de datos
-    List<Pokemon> pokemon = await pokemonId(id);
-
-    if(pokemon.isNotEmpty){
-      ret = pokemon[0].favorite == 1 ? true : false;
-    }
-
-    return ret;
-
-  }
-
   // Cambiar el estado de favorito de un pokemon
   Future<List<Pokemon>> changeFavorite(int id) async {
     print("Changing Favorite pokemon: $id");
@@ -171,25 +197,25 @@ class DatabaseHelper {
 
   }
 
-  Future<List<Pokemon>> updateDatabase(PQ.PokemonGraphQL pokemonGraphQL) async {
+  Future<List<Pokemon>> updateDatabase(PQ.PokemonGraphQL pokemonGraphQL, int newHash) async {
 
     // Ini database
     final db = await _database;
 
-    // Check if there is changed information
+    // get pokemon list and hash from database
     List<Pokemon> dbPokemons = await pokemonList();
+    List<int> dbHash = await hashList();
+    print("New hash: $newHash");
 
-    if (dbPokemons.length == pokemonGraphQL.pokemonList.length){
-      for (var i = 0 ; i < dbPokemons.length ; i ++){
-        dbPokemons[i].sprites = graphQLSpritesToPokemonSprites(pokemonGraphQL.pokemonList[i].pokemonV2PokemonSprites, dbPokemons[i].id);
-
-        if (dbPokemons[i].id == 1013){
-          print(dbPokemons[i].sprites);
+    if (dbHash.isNotEmpty){
+      print("DB hash:  ${dbHash[0]}");
+      if (dbHash[0] == newHash){
+        print("No changes to the database, hash hasnt changed.");
+        for (var i = 0 ; i < dbPokemons.length ; i ++){
+          dbPokemons[i].sprites = _graphQLSpritesToPokemonSprites(pokemonGraphQL.pokemonList[i].pokemonV2PokemonSprites, dbPokemons[i].id);
         }
-
+        return dbPokemons;
       }
-
-      return dbPokemons;
     }
 
     List<Pokemon> pokemons = [];
@@ -198,7 +224,7 @@ class DatabaseHelper {
       
       String type1 = p.pokemonV2PokemonTypes[0].pokemonV2Type.name;
       String type2 = p.pokemonV2PokemonTypes.length > 1 ? p.pokemonV2PokemonTypes[1].pokemonV2Type.name : "";
-      List<String> sprites = graphQLSpritesToPokemonSprites(p.pokemonV2PokemonSprites, p.id);
+      List<String> sprites = _graphQLSpritesToPokemonSprites(p.pokemonV2PokemonSprites, p.id);
       Pokemon poke = Pokemon(
         id: p.id,
         favorite: 0,
@@ -220,12 +246,14 @@ class DatabaseHelper {
           conflictAlgorithm: ConflictAlgorithm.replace
       );
     });
-    batch.commit();
+    batch.commit().whenComplete(() {
+      insertHash(newHash);
+    });
 
     return pokemons;
   }
 
-  List<String> graphQLSpritesToPokemonSprites(List<PQ.PokemonV2PokemonSprites> pokemonV2PokemonSprites, int id) {
+  List<String> _graphQLSpritesToPokemonSprites(List<PQ.PokemonV2PokemonSprites> pokemonV2PokemonSprites, int id) {
 
     List<String> sprites = [];
 

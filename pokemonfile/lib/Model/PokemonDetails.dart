@@ -57,11 +57,13 @@ class PokemonDetails {
 // Funcion privada para traducir de los DTO a la clase que se usara en la applicacion (para abstraccion)
 PokemonDetails injectDetails(PO.PokemonOnly pokemonOnly, PS.PokemonSpecies pokemonSpecies, EC.EvolutionChain evolutionChain) {
 
+  // Stats
   List<Stat> stats = [];
   pokemonOnly.stats.forEach((e) {
     stats.add(Stat(name: e.stat.name, baseStat: e.baseStat));
   });
 
+  // Sprites
   List<String> sprites = [];
   if (pokemonOnly.sprites.other.home.frontDefault != null){
     sprites.add(pokemonOnly.sprites.other.home.frontDefault!);
@@ -76,12 +78,14 @@ PokemonDetails injectDetails(PO.PokemonOnly pokemonOnly, PS.PokemonSpecies pokem
     sprites.add('https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokemonOnly.id}.png');
   }
 
+  // Flavor Text
   String flavorText = "";
   List<PS.FlavorTextEntries> flavorList = pokemonSpecies.flavorTextEntries.where((element) => element.language.name == "es").toList();
   if (flavorList.isNotEmpty){
     flavorText = flavorList[0].flavorText;
   }
 
+  // Evolutions
   List<Evolution> evolutions = [
     Evolution(
       id: int.parse(evolutionChain.chain.species.url.split('/')[6]),
@@ -91,11 +95,13 @@ PokemonDetails injectDetails(PO.PokemonOnly pokemonOnly, PS.PokemonSpecies pokem
     ),
   ];
 
+  // Types
   List<String> types = [];
   pokemonOnly.types.forEach((element) {
     types.add(element.type.name);
   });
 
+  // Moves
   List<Move> moves = [];
   pokemonOnly.moves.forEach((element) {
     moves.add(Move(id: int.parse(element.move.url.split("/")[6]), name: element.move.name));

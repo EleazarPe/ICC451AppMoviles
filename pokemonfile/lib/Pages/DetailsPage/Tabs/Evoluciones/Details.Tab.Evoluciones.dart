@@ -123,7 +123,7 @@ class _TabEvolucionesState extends State<TabEvoluciones> {
           ),
           Container(
             alignment: Alignment.bottomCenter,
-            child: Text(evolution.name),
+            child: Text(evolution.name.replaceAll('-', ' ').substring(0, 1).toUpperCase() + evolution.name.replaceAll('-', ' ').substring(1)),
           ),
         ],
       ),

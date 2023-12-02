@@ -37,7 +37,7 @@ class TabMovimientos extends StatelessWidget {
                     padding: const EdgeInsets.only(
                         right: 10.0, left: 10.0, top: 10.0, bottom: 10.0),
                     child: Text(
-                      pokemonDetails.moves[index].name,
+                      pokemonDetails.moves[index].name.replaceAll('-', ' ').substring(0, 1).toUpperCase() + pokemonDetails.moves[index].name.replaceAll('-', ' ').substring(1),
                       style: const TextStyle(
                         fontSize: 20,
                       ),

@@ -62,7 +62,7 @@ class TabInformacion extends StatelessWidget {
                           borderRadius: BorderRadius.circular(8.0),
                         ),
                         child: Text(
-                          element,
+                          element.substring(0, 1).toUpperCase() + element.substring(1).replaceAll('-', ' '),
                           style: TextStyle(color: textColor),
                           textAlign: TextAlign.center,
                         ),
@@ -196,7 +196,7 @@ class TabInformacion extends StatelessWidget {
                 margin: const EdgeInsets.only(right: 5.0),
                 alignment: Alignment.centerLeft,
                 child: Text(
-                  " - $e",
+                  " - ${e.substring(0, 1).toUpperCase() + e.substring(1).replaceAll('-', ' ')} ",
                   style: const TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
