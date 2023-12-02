@@ -27,9 +27,21 @@ En la pagina de detalles hemos podido enseñar todas las informaciones que se ha
 En la pagina principal podemos buscar por nombres de pokemones, id de un pokemon especifico y poner un filtro de busqueda de pokemones favoritos.
 Y va sin decir pero hemos podido implementar correctamente una base de datos que contiene la informaion basica del pokemon, pero mas importante contiene la informacion si es un pokemon favorito o no.
 
-#### Siguiente tema: [Necesidades de la Aplicacion](#necesidades-de-la-aplicacion)
+### Integración de la API
 
-#### Imagenes
+Hemos usado dos herramientas para comunicarnos con la api. Primero es usando el api rest, este contiene varios endpoints los cuales usamod para obtener los detalles de los pokemones. En especifico usamos los endpoints para el pokemon species y evolution chain. La otra herramienta es GraphQL, esta la usamos para buscar la lista completa de pokemones y agregarles los tipos a cada uno. La razon por la cual no implementamos GraphQL para todo es porque es bastante limitada. Ya que no podemos encontrar el evolution chain en GraphQL decidimos hacer las llamadas normales.
+
+### Navegacion y Personalizacion
+
+La navegacion es bastante intuitiva, si quieres filtrar por favoritos le das al corazon, precionando en la lista te manda al pokemon y dandole a las evoluciones del pokemon te da los detalles del mismo. En general hemos podido incorporar una ui intuitiva bastante bien. Y miesntras que es verdad que tomamos inspiracion de otras aplicaciones, sentimos que nuestro estilo es unico y viene de nosotros.
+
+Esta es una adicion opcional, pero hemos implementado SQLite al programa, la cual nos deja guardar no solo el estado de favorito del pokemon, pero tambien el id, nombre, y tipos.
+
+
+#### Siguiente tema: [Partes Opcionales Agregadas a la Aplicacion](#partes-opcionales-agregadas-a-la-aplicacion)
+#### [Regresar a Contenidos](#contenidos)
+
+### Imagenes
 ![image](https://github.com/EleazarPe/ICC451AppMoviles/assets/132306836/dab16c8b-5e6f-4804-90ad-0a474906fe6a)
 ![image](https://github.com/EleazarPe/ICC451AppMoviles/assets/132306836/7ed770ab-9361-47db-ad2d-e4f4820cd66d)
 ![image](https://github.com/EleazarPe/ICC451AppMoviles/assets/132306836/f812f17f-1486-403a-96f3-ff7cd6fbb759)
@@ -38,9 +50,19 @@ Y va sin decir pero hemos podido implementar correctamente una base de datos que
 ![image](https://github.com/EleazarPe/ICC451AppMoviles/assets/132306836/dad55bd5-9513-4296-91f6-659fab01bc3e)
 ![image](https://github.com/EleazarPe/ICC451AppMoviles/assets/132306836/102b4f39-ed16-40f3-ae38-5e142c786138)
 
-
 # Partes Opcionales Agregadas a la Aplicacion
 #### [Regresar a Contenidos](#contenidos)
+
+### Implementación de un Sistema de Filtrado y Ordenación de Pokémon
+
+Es posible filtrar por pokemones favoritos.
+
+### Animaciones y Transiciones Para Mejorar la Experiencia del Usuario
+
+Hemos agregado varias animaciones en la aplicacion para que los usuarios se sientan que el programa esta corriendo y funcionando, ayudando a la responsividad de la aplicacion
+
+![image](https://github.com/EleazarPe/ICC451AppMoviles/assets/132306836/3bff62d0-ffb2-4469-a7e8-25a0ee5d7998)
+![image](https://github.com/EleazarPe/ICC451AppMoviles/assets/132306836/8b2fa293-8d26-4221-b8b1-de1822d32045)
 
 # Documentacion
 #### [Regresar a Contenidos](#contenidos)
