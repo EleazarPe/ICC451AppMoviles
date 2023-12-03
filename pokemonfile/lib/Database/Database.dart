@@ -197,7 +197,7 @@ class DatabaseHelper {
 
   }
 
-  Future<List<Pokemon>> updateDatabase(PQ.PokemonGraphQL pokemonGraphQL, int newHash) async {
+  Future<List<Pokemon>> updateDatabase(PQ.PokemonGraphQL pokemonGraphQL) async {
 
     // Ini database
     final db = await _database;
@@ -205,6 +205,8 @@ class DatabaseHelper {
     // get pokemon list and hash from database
     List<Pokemon> dbPokemons = await pokemonList();
     List<int> dbHash = await hashList();
+
+    int newHash = pokemonGraphQL.hashCode;
     print("New hash: $newHash");
 
     if (dbHash.isNotEmpty){

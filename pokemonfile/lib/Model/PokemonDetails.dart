@@ -90,7 +90,7 @@ PokemonDetails injectDetails(PO.PokemonOnly pokemonOnly, PS.PokemonSpecies pokem
     Evolution(
       id: int.parse(evolutionChain.chain.species.url.split('/')[6]),
       name: evolutionChain.chain.species.name,
-      evolvesTo: obtainEvolutions(evolutionChain.chain.evolvesTo),
+      evolvesTo: _obtainEvolutions(evolutionChain.chain.evolvesTo),
       minLevel: null
     ),
   ];
@@ -136,14 +136,14 @@ PokemonDetails injectDetails(PO.PokemonOnly pokemonOnly, PS.PokemonSpecies pokem
 }
 
 // Funcion para traducir entre clase y DTO
-List<Evolution> obtainEvolutions(List<EvolvesTo> evolvesTo){
+List<Evolution> _obtainEvolutions(List<EvolvesTo> evolvesTo){
 
   List<Evolution> evolutions = [];
   evolvesTo.forEach((e) {
     Evolution evolution = Evolution(
       id: int.parse(e.species.url.split('/')[6]),
       name: e.species.name,
-      evolvesTo: obtainEvolutions(e.evolvesTo),
+      evolvesTo: _obtainEvolutions(e.evolvesTo),
       minLevel: e.evolutionDetails.isNotEmpty ? e.evolutionDetails[0].minLevel : null,
     );
     evolutions.add(evolution);
