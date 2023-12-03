@@ -71,6 +71,7 @@ Hemos agregado varias animaciones en la aplicacion para que los usuarios se sien
 - [Base de Datos](#base-de-datos)
 - [Modelos](#modelos)
 - [Pages](#pages)
+- [Credits and Assets](#credits-and-assets)
 
 ## Estructura del Proyecto
 
@@ -164,6 +165,6 @@ Pagina que se encarga de mostrar todos los datos del pokemon.
 - La informacion se carga de 3 llamadas a la api, esos DTOs se conviertien en un objeto pokemonDetails que se usa para desplegar toda la informacion.
 - La pagina de evoluciones es la mas complicada ya que utiliza iteracion y rows y columns adentro de cada uno para mostrar las evoluciones.
 
-## Credits and assets
+## Credits and Assets
 El forlder de assets esta lleno de varios iconos usados en la aplicacion, el documento credits.txt contiene todos los links de los creadores de estos iconos.
 
