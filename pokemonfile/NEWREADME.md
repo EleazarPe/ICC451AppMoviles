@@ -68,16 +68,20 @@ Hemos agregado varias animaciones en la aplicacion para que los usuarios se sien
 #### [Regresar a Contenidos](#contenidos)
 
 - [Estructura del Proyecto](#estructura-del-proyecto)
+- [Base de Datos](#base-de-datos)
+- [Modelos](#modelos)
+- [Pages](#pages)
+- [Credits and Assets](#credits-and-assets)
 
-### Estructura del Proyecto
+## Estructura del Proyecto
 
 Los folders y documentos estan organizados en manera de arbol, se hace facil ver a simple ver como esta compuesto el proyecto
 
 ![image](https://github.com/EleazarPe/ICC451AppMoviles/assets/132306836/b96187ea-5ec8-4652-8648-f76b2f730ac0)
 
-### Base de Datos y como accesarlas
+## Base de Datos
 
-La base de datos esta basada en SQLite, esta contiene una tabla "pokemons".
+La base de datos esta basada en SQLite, esta contiene una tabla "pokemons" y hash.
 
 La tabla pokemons tiene 5 datos:
 - id INTEGER PRIMARY KEY; id del pokemon.
@@ -86,9 +90,81 @@ La tabla pokemons tiene 5 datos:
 - type1 STRING; primer tipo del pokemon.
 - tepy2 STRING; segundo tipo del pokemon, estara como "" si no tiene.
 
-La base de datos se puede accesar con el database Helper. Aparte de las funciones del CRUD normal tenemos algunas diferentes.
+La tabla hash tiene 2 datos:
+- id INTEGER PRIMARY KEY; id del pokemon.
+- hash INTEGER; numero de hash o identidad de la informacion.
+
+Clase DatabaseHelper(); La clase que se usa para comunicarse con la base de datos.
 - Future<List<Pokemon>> pokemonId(int id); obtiene el pokemon con el id especifico y retorna una lista con ese pokemon, si esta vacia es que no se encontro el pokemon.
 - Future<List<Pokemon>> changeFavorite(int id); cambia es el estado de favorito de el pokemon con un id en especifico.
 - Future<List<Pokemon>> updateDatabase(PQ.PokemonGraphQL pokemonGraphQL); Toma el Json proveniente de graphQL con la lista de los pokemons y actualiza la base de datos, tambien agrega los sprites a la lista en memoria de los pokemones. Es llamada al principio de la apliacacion.
+- Future<void> insertHash(int hash); Agregar/Reemplazar el nuevo a la base de datos.
+- Future<List<int>> hashList(); Obtener el hash de la base de datos, la lista esta varia si no existe.
 
+#### Partes notables:
+- El Hash se usa para comparar la informacion obtenida de la api y saber si es la misma o diferente. Solo se toma en cuenta el id, nombre, y tipos del pokemon. Para esto tenemos un override del metodo hashCode para la clase PokemonGraphQL.
+![image](https://github.com/EleazarPe/ICC451AppMoviles/assets/132306836/ae01e947-b7ff-412b-ba34-6328960b2e1a)
+
+## Modelos
+
+### Pokemon.dart
+
+#### Clase Pokemon
+* int id; id del pokemon.
+* int favorite; 1 si es favorito, 0 si no lo es.
+* String name; nombre del pokemon.
+* String type1; typo 1 del pokemon.
+* String type2; tipo 2 del pokemon, si no tiene estara en "".
+* List<String> sprites; lista con los sprites del pokemon.
+
+#### Metodos
+- bool favoriteBool(); Retorna true si el pokemon es un favorito, y false si no lo es.
+
+#### Funciones
+- Pokemon getPokemonId(List<Pokemon> pokemons, int id); Obtiene el objeto pokemon de una lista dando el id.
+- Color getColorForElement(String element); Retorna un color dado el nombre del tipo.
+- Color textColorForBackground(Color backgroundColor); dado un color obtener el color negro o blanco basandose de su luminosidad.
+
+### PokemonDetails.dart
+
+#### Clase PokemonDetails
+* int id; id del pokemon.
+* String name; nombre del pokemon.
+* List<String> types; nombres de los tipos del pokemon.
+* int height; altura del pokemon.
+* int weight; peso del pokemon.
+* List<Stat> stats; stats del pokemon.
+* List<Move> moves; movimientos del pokemon.
+* List<String> sprites; imagenes del pokemon.
+* int captureRate; informacion de la captura del pokemon.
+* String generation; generacion del pokemon.
+* String growthRate; crecimiento del pokemon.
+* int hatchCounter; cuantos pasos el jugador tiene que tomar para que el pokemon nazca.
+* String flavorText; Descripcion del pokemon
+* List<String> abilities; habilidades del pokemon.
+* List<Evolution> evolutionChain; cadena de evolucion del pokemon.
+
+#### Funciones
+- PokemonDetails injectDetails(PO.PokemonOnly pokemonOnly, PS.PokemonSpecies pokemonSpecies, EC.EvolutionChain evolutionChain); Volver los DTOs de la api a una clase utilizable.
+
+
+## Pages
+
+### List Page
+Pagina que muestra la lista de pokemones.
+
+#### Base de la Funcionalidad
+- La lista funciona con 1 lista de pokemones en memoria, esta es cargada de graphql y la base de datos con la funcion _loadPokemones. Esta lista el filtrada dependiendo la busqueda y filtros aplicados en la pagina.
+- La variable loading se usa para saber si los datos estan siendo cargados o no.
+- void updatePokemonFromChild(int id, int favorite); Funciona en el Details page y Card como un callback para cambiar el estado de favorito de un pokemon.
+
+### Details Page
+Pagina que se encarga de mostrar todos los datos del pokemon.
+#### Base de la Funcionalidad
+- La pagina esta separada en tabs de informacion, estadistica, evoluciones y movimientos.
+- La informacion se carga de 3 llamadas a la api, esos DTOs se conviertien en un objeto pokemonDetails que se usa para desplegar toda la informacion.
+- La pagina de evoluciones es la mas complicada ya que utiliza iteracion y rows y columns adentro de cada uno para mostrar las evoluciones.
+
+## Credits and Assets
+El forlder de assets esta lleno de varios iconos usados en la aplicacion, el documento credits.txt contiene todos los links de los creadores de estos iconos.
 
